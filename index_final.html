@@ -1,0 +1,1391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pascal Corso</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a4d6d;
+            --secondary: #2d6a8e;
+            --accent: #d4af37;
+            --light: #f8f9fa;
+            --dark: #1d1d1f;
+            --text: #2c2c2e;
+            --border: rgba(29, 77, 109, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+            color: var(--text);
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8eef3 100%);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        .grain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.03;
+            z-index: 9999;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        }
+
+        header {
+            background: var(--dark);
+            color: white;
+            position: relative;
+            overflow: hidden;
+            min-height: 600px;
+            display: flex;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .header-content {
+            display: grid;
+            grid-template-columns: 40% 60%;
+            width: 100%;
+            min-height: 600px;
+        }
+
+        .header-left {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            padding: 4rem 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .header-left::before {
+            content: '';
+            position: absolute;
+            top: -20%;
+            right: -10%;
+            width: 50%;
+            height: 140%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .header-info {
+            position: relative;
+            z-index: 2;
+        }
+
+        .profile-photo {
+            margin-bottom: 2rem;
+            animation: fadeIn 1s ease-out 0.8s both;
+        }
+
+        .profile-photo img {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid white;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .profile-photo:hover img {
+            transform: scale(1.05);
+        }
+
+        .profile-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            animation: fadeIn 1s ease-out 1s both;
+        }
+
+        .profile-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .profile-link:hover {
+            background: white;
+            border-color: var(--accent);
+            transform: scale(1.1) translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .profile-link svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+            transition: fill 0.3s ease;
+        }
+
+        .profile-link:hover svg {
+            fill: var(--primary);
+        }
+
+        .header-right {
+            position: relative;
+            background: var(--dark);
+            overflow: hidden;
+        }
+
+        .carousel {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .carousel-track {
+            display: flex;
+            height: 100%;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .carousel-slide {
+            min-width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--dark);
+        }
+
+        .carousel-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: scale-down;
+            object-position: center;
+        }   
+
+        .carousel-caption {
+            position: absolute;
+            bottom: 2rem;
+            left: 2rem;
+            right: 2rem;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            color: white;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--primary);
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .carousel-nav:hover {
+            background: white;
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .carousel-nav.prev {
+            left: 2rem;
+        }
+
+        .carousel-nav.next {
+            right: 2rem;
+        }
+
+        .carousel-indicators {
+            position: absolute;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 0.5rem;
+            z-index: 10;
+        }
+
+        .carousel-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .carousel-indicator.active {
+            background: white;
+            width: 30px;
+            border-radius: 5px;
+        }
+
+        header::before {
+            display: none;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-20px, 20px) rotate(5deg); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 4rem;
+            font-weight: 300;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+            animation: slideUp 1s ease-out 0.2s both;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            font-weight: 300;
+            opacity: 0.95;
+            margin-bottom: 2rem;
+            animation: slideUp 1s ease-out 0.4s both;
+        }
+
+        .tagline {
+            font-size: 1.1rem;
+            opacity: 0.85;
+            max-width: 700px;
+            line-height: 1.8;
+            animation: slideUp 1s ease-out 0.6s both;
+        }
+
+        nav {
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem 2rem;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+            z-index: 1000;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-100%); }
+            to { transform: translateY(0); }
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 500;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--accent);
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        section {
+            padding: 5rem 2rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        section:nth-child(even) {
+            background: white;
+        }
+
+        h2 {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 2.8rem;
+            color: var(--primary);
+            margin-bottom: 3rem;
+            font-weight: 500;
+            position: relative;
+            display: inline-block;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--accent);
+        }
+
+        .research-grid, .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+
+        .card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border-left: 4px solid var(--accent);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, transparent 0%, rgba(230, 57, 70, 0.03) 100%);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .project-card {
+            cursor: pointer;
+        }
+
+        .project-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 16px 50px rgba(0,0,0,0.15);
+            border-left-color: var(--secondary);
+        }
+
+        .conference-card {
+            cursor: pointer;
+            position: relative;
+            min-height: 320px;
+        }
+
+        .conference-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 16px 50px rgba(0,0,0,0.15);
+            border-left-color: var(--accent);
+        }
+
+        .conference-overlay {
+            position: relative;
+            z-index: 2;
+            background: rgba(255, 255, 255, 0.80);
+            padding: 2rem;
+            border-radius: 8px;
+            backdrop-filter: blur(5px);
+            height: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .conference-card:hover .conference-overlay {
+            background: rgba(255, 255, 255, 0.88);
+        }
+
+        .conference-overlay h3 {
+            color: var(--primary);
+        }
+
+        .conference-overlay p {
+            color: var(--text);
+        }
+
+        .project-image {
+            width: 100%;
+            height: 150px;              /* ✓ Added */
+            border-radius: 8px;          /* ✓ Added */
+            margin-bottom: 1.5rem;       /* ✓ Added */
+            background-size: cover;      /* ✓ Added */
+            background-position: center; /* ✓ Added */
+            transition: transform 0.4s ease;
+        }
+
+        .project-card:hover .project-image {
+            transform: scale(1);
+        }
+
+        .profile-photo {
+            animation: fadeIn 1s ease-out 0.8s both;
+        }
+
+        .profile-photo img {
+            transition: transform 0.3s ease;
+        }
+
+        .profile-photo:hover img {
+            transform: scale(1.05);
+        }
+
+        .card h3 {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 1.6rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .card p {
+            color: var(--text);
+            margin-bottom: 0.8rem;
+            line-height: 1.7;
+        }
+
+        .card .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .tag {
+            background: var(--light);
+            color: var(--primary);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 3rem;
+            margin-top: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--primary), var(--accent));
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 3rem;
+            animation: slideInLeft 0.6s ease-out;
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -3.5rem;
+            top: 0;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--accent);
+            border: 3px solid white;
+            box-shadow: 0 0 0 2px var(--accent);
+        }
+
+        .timeline-item h3 {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-item .year {
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .timeline-item .institution {
+            color: var(--secondary);
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .timeline-item a {
+            color: var(--primary);
+            text-decoration: none;
+            border-bottom: 2px solid var(--accent);
+            transition: all 0.3s ease;
+        }
+
+        .timeline-item a:hover {
+            color: var(--accent);
+            border-bottom-color: var(--primary);
+        }
+
+        .skills-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .skill-category {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        }
+
+        .skill-category h3 {
+            font-family: 'IBM Plex Sans', sans-serif;
+            color: var(--primary);
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .skill-category ul {
+            list-style: none;
+        }
+
+        .skill-category li {
+            padding: 0.6rem 0;
+            border-bottom: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        .skill-category li:last-child {
+            border-bottom: none;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .contact-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            transition: transform 0.3s;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .contact-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-card h3 {
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-card a {
+            color: var(--secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .contact-card a:hover {
+            color: var(--accent);
+        }
+
+        footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+
+        footer p {
+            opacity: 0.8;
+            font-size: 0.95rem;
+        }
+
+        .highlight {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            h2 {
+                font-size: 2rem;
+            }
+
+            nav ul {
+                gap: 1.5rem;
+            }
+
+            section {
+                padding: 3rem 1.5rem;
+            }
+
+            .header-content {
+                grid-template-columns: 1fr;
+                min-height: auto;
+            }
+
+            .header-left {
+                padding: 3rem 2rem;
+                min-height: 400px;
+            }
+
+            .header-right {
+                min-height: 400px;
+            }
+
+            .carousel-nav {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+
+            .carousel-nav.prev {
+                left: 1rem;
+            }
+
+            .carousel-nav.next {
+                right: 1rem;
+            }
+
+            .carousel-caption {
+                bottom: 1rem;
+                left: 1rem;
+                right: 1rem;
+                padding: 0.8rem 1rem;
+                font-size: 0.85rem;
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 1s ease-out forwards;
+        }
+
+        .stagger-1 { animation-delay: 0.1s; }
+        .stagger-2 { animation-delay: 0.2s; }
+        .stagger-3 { animation-delay: 0.3s; }
+        .stagger-4 { animation-delay: 0.4s; }
+    </style>
+</head>
+<body>
+    <div class="grain"></div>
+
+    <header>
+        <div class="header-content">
+            <!-- LEFT SIDE: Profile information -->
+            <div class="header-left">
+                <div class="header-info">
+                    <div class="profile-photo">
+                        <img src="profile-photo.jpg" alt="Dr Pascal Corso">
+                    </div>
+                    
+                    <div class="profile-links">
+                        <a href="https://www.linkedin.com/in/pascal-corso-9a334b97/" target="_blank" class="profile-link" title="LinkedIn">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                            </svg>
+                        </a>
+                        
+                        <a href="https://scholar.google.com/citations?user=stRLORMAAAAJ&hl=en" target="_blank" class="profile-link" title="Google Scholar">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M12 24a7 7 0 1 1 0-14 7 7 0 0 1 0 14zm0-24L0 9.5l4.838 3.94A8 8 0 0 1 12 9a8 8 0 0 1 7.162 4.44L24 9.5z"/>
+                            </svg>
+                        </a>
+                        
+                        <a href="https://orcid.org/0000-0001-7875-1080" target="_blank" class="profile-link" title="ORCID">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+                                <path d="M256 128c0 70.7-57.3 128-128 128S0 198.7 0 128 57.3 0 128 0s128 57.3 128 128z"/>
+                                <path fill="#fff" d="M86.3 186.2H70.9V79.1h15.4v107.1zM108.9 79.1h41.6c39.6 0 57 28.3 57 53.6 0 27.5-21.5 53.6-56.8 53.6h-41.8V79.1zm15.4 93.3h24.5c34.9 0 42.9-26.5 42.9-39.7C191.7 111.2 178 93 148 93h-23.7v79.4zM71.3 54.8c0-5.2 4.2-9.4 9.4-9.4s9.4 4.2 9.4 9.4c0 5.2-4.2 9.4-9.4 9.4s-9.4-4.2-9.4-9.4z"/>
+                            </svg>
+                        </a>
+                    </div>
+                    
+                    <h1><span class="highlight">Pascal Corso<span></h1>
+                    <p class="subtitle"><strong><span class="highlight">Dr sc. ETH Zurich & Mechanical Engineer<span></strong></p>
+                    <p class="subtitle">Researcher in Cardiovascular Biomechanics | Entrepreneur</p>
+                    <p class="tagline"><i>Fusing fluid and solid mechanics, in silico simulations, in vitro testing, machine learning to advance medical technology and improve patient care.</i></p>
+                </div>
+            </div>
+
+            <!-- RIGHT SIDE: Research figures carousel -->
+            <div class="header-right">
+                <div class="carousel">
+                    <div class="carousel-track">
+                        <!-- Slide 1 -->
+                        <div class="carousel-slide">
+                            <img src="research-figure-1.jpg" alt="Research Figure 1">
+                            <div class="carousel-caption">
+                                Fluid-structure interaction simulations of elastomeric aortic valve dynamics
+                            </div>
+                        </div>
+                        <!-- Slide 2 -->
+                        <div class="carousel-slide">
+                            <img src="research-figure-2.jpg" alt="Research Figure 2">
+                            <div class="carousel-caption">
+                                In silico simulations and analysis of vortical flow structures downstream of stenotic and bioprosthetic valves
+                            </div>
+                        </div>
+                        <!-- Slide 3 -->
+                        <div class="carousel-slide">
+                            <img src="research-figure-3.jpg" alt="Research Figure 3">
+                            <div class="carousel-caption">
+                                In vitro three-dimensional particle tracking velocimetry (3D-PTV) measurements of stenotic and transcatheter aortic valves
+                            </div>
+                        </div>
+                        <!-- Slide 4 -->
+                        <div class="carousel-slide">
+                            <img src="research-figure-4.jpg" alt="Research Figure 4">
+                            <div class="carousel-caption">
+                                Calcification in bioprosthetic aortic valves - In silico predictions correlated with ex vivo micro-CT data from explanted valves
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Navigation arrows -->
+                    <button class="carousel-nav prev" onclick="moveSlide(-1)">‹</button>
+                    <button class="carousel-nav next" onclick="moveSlide(1)">›</button>
+
+                    <!-- Indicators -->
+                    <div class="carousel-indicators">
+                        <span class="carousel-indicator active" onclick="goToSlide(0)"></span>
+                        <span class="carousel-indicator" onclick="goToSlide(1)"></span>
+                        <span class="carousel-indicator" onclick="goToSlide(2)"></span>
+                        <span class="carousel-indicator" onclick="goToSlide(3)"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#about">About</a></li>
+            <li><a href="#research">Current projects</a></li>
+            <li><a href="#publications">Publications</a></li>
+            <li><a href="#funding">Proposals</a></li>
+            <li><a href="#education">Experience & education</a></li>
+            <li><a href="#skills">Skills & interests</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <section id="about">
+        <div class="container">
+            <h2>About me</h2>
+            <p style="max-width: 800px; font-size: 1.1rem; line-height: 1.9;">
+                As a researcher specialised in <span class="highlight">cardiovascular biomechanics</span>, computational and experimental <span class="highlight">fluid dynamics</span>, I aim to advance <span class="highlight">prosthetic heart valve technology</span>. A decade studying aortic flow abnormalities underpins methods that evaluate valve performance and steer the design of longer-lasting artificial valves with better haemodynamics. My research trajectory reflects deliberate progression toward improving <span class="highlight">cardiovascular prosthesis design</span>. Beginning with flow-diverter stents during my mechanical engineering studies at the University of Mons (2008-2013), I advanced to examining, through doctoral research, turbulent transitions downstream of stenotic and artificial aortic valves at ETH Zurich (2016-2020). As postdoctoral researcher at the University of Bern (2020-2024), I led the computational haemodynamics group while investigating fluid-structure mechanisms underlying valve calcification and flow disturbances in bioprosthetic valves, yielding crucial insights into failure modes and leaflet designs.
+            </p>
+            <p style="max-width: 800px; font-size: 1.1rem; line-height: 1.9; margin-top: 1.5rem;">
+                Currently, I expand my research into academic and entrepreneurial efforts for next-generation aortic valve designs, combining experimental flow measurements with advanced computational methods. This work secured over 400,000 CHF in supercomputing resources, enabling comprehensive performance evaluation prior to prototyping and animal testing. My recent position at the Swiss Data Science Center strengthened my <span class="highlight">machine learning</span> capabilities, which I now integrate into a <span class="highlight">valve optimisation platform</span>. I am also pursuing a CAS in Entrepreneurial Leadership in Technology Ventures at ETH Zurich, bridging the gap between academic innovation and real-world medical applications.
+            </p>
+        </div>
+    </section>
+
+    <section id="research">
+        <div class="container">
+            <h2>Current projects</h2>
+            <div class="research-grid">
+                <!-- <a href="project-durablevalve.html" style="text-decoration: none; color: inherit;"> -->
+                    <div class="card fade-in stagger-1 project-card">
+                        <!-- <div class="project-image" style="width: 100%; height: 200px; background: linear-gradient(135deg, #1a4d6d 0%, #2d6a8e 100%); border-radius: 8px; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">
+                            🫀
+                        </div> -->
+                        <div class="project-image" style="background-image: url('durablevalve-2-pic.jpg'); background-size: cover;">
+                        </div>
+                        <h3>Next-generation prosthetic aortic valve design</h3>
+                        <p><strong>Role:</strong> Project lead</p>
+                        <p>Developing DurAbleValve, a computational platform combining fluid-structure interaction simulations, Bayesian optimisation and accelerated calcification testing for prosthetic valve design. The platform delivers patient-specific performance prediction and design customisation to valve manufacturers.</p>
+                        <div class="tags">
+                            <span class="tag">Patient-specific design</span>
+                            <span class="tag">FSI simulations</span>
+                            <span class="tag">Medtech startup</span>
+                        </div>
+                        <!-- <p style="margin-top: 1rem; color: var(--accent); font-weight: 600;">Click to learn more →</p> -->
+                    </div>
+                <!-- </a> -->
+
+                <!-- <a href="project-durablevalve.html" style="text-decoration: none; color: inherit;"> -->
+                    <div class="card fade-in stagger-1 project-card">
+                        <div class="project-image" style="background-image: url('superresolution-pic.jpg');"></div>
+                        <h3>Deep generative super-resolution for enhanced biomedical imaging</h3>
+                        <p><strong>Role:</strong> Project lead</p>
+                        <p><strong>Collaboration:</strong> Swiss Data Science Center, ETH Zurich</p>
+                        <p>Developing deep generative models (conditional variational autoencoders, latent diffusion models) to enhance spatial resolution of biomedical imaging data. Trained on mouse brain mass spectrometry data and cardiovascular 3D particle tracking velocimetry fields, with 4D Flow MRI extension planned. Integrated into the valve optimisation platform.</p>
+                        <div class="tags">
+                            <span class="tag">Generative AI</span>
+                            <span class="tag">Super-resolution</span>
+                            <span class="tag">Multimodal imaging</span>
+                        </div>
+                    </div>
+                <!-- </a> -->
+
+                <!-- <a href="project-durablevalve.html" style="text-decoration: none; color: inherit;"> -->
+                    <div class="card fade-in stagger-1 project-card">
+                        <div class="project-image" style="background-image: url('aortaflow-pic.jpg');"></div>
+                        <h3>Performance evaluation of polymeric aortic valves</h3>
+                        <p><strong>Role:</strong> Project lead</p>
+                        <p><strong>Collaboration:</strong> Dr Fergal Coulter, ETH Zurich</p>
+                        <p>Comparing 3D-printed polymeric valves (two leaflet designs) to biological counterparts through FSI simulations on HPC infrastructure. Unsupervised clustering of haemodynamic and strain metrics classifies calcification risk whilst flow analyses characterise pathological patterns and transitional laminar-to-turbulent structures downstream.</p>
+                        <div class="tags">
+                            <span class="tag">Polymeric valves</span>
+                            <span class="tag">Transitional haemodynamics</span>
+                            <span class="tag">Calcification prediction</span>
+                        </div>
+                    </div>
+                <!-- </a> -->
+
+
+                <!-- <div class="card fade-in stagger-1">
+                    <h3>Conditional Variational Autoencoders</h3>
+                    <p><strong>Collaborations:</strong> ETH Zurich, Swiss Data Science Center</p>
+                    <p>Developing conditional VAE architectures for super-resolution reconstruction in biomedical imaging, specifically for mouse brain lipid distribution analysis using mass spectrometry imaging data.</p>
+                    <div class="tags">
+                        <span class="tag">Deep Learning</span>
+                        <span class="tag">VAE</span>
+                        <span class="tag">Biomedical Imaging</span>
+                    </div>
+                </div>
+                <div class="card fade-in stagger-2">
+                    <h3>ADAPT-AV Platform</h3>
+                    <p><strong>Collaborations:</strong> Dr Frédéric Vanden Eynden, Hôpitaux Universitaires de Bruxelles</p>
+                    <p>Research proposal for computational optimization of tissue-engineered aortic valves through GPU-accelerated simulations and Bayesian optimization, with clinical cardiac surgery collaboration.</p>
+                    <div class="tags">
+                        <span class="tag">Bayesian Optimization</span>
+                        <span class="tag">GPU Computing</span>
+                        <span class="tag">Medical Devices</span>
+                    </div>
+                </div> -->
+            </div>
+
+            <!-- <h3 style="font-family: 'IBM Plex Sans', sans-serif; font-size: 1.8rem; color: var(--secondary); margin-top: 4rem; margin-bottom: 2rem; font-weight: 500;">Past Research Projects</h3>
+            <div class="research-grid">
+                <a href="project-calcification.html" style="text-decoration: none; color: inherit;">
+                    <div class="card fade-in stagger-2 project-card">
+                        <div class="project-image" style="width: 100%; height: 200px; background: linear-gradient(135deg, #2d6a8e 0%, #1a4d6d 100%); border-radius: 8px; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">
+                            🔬
+                        </div>
+                        <h3>Valve Calcification Prediction</h3>
+                        <p><strong>Institution:</strong> University of Bern, ARTORG Center (2021-2023)</p>
+                        <p>Led computational haemodynamics group developing predictive models for valve calcification using FSI methodologies. Supervised 3 PhD students on this multi-year research initiative.</p>
+                        <div class="tags">
+                            <span class="tag">FSI</span>
+                            <span class="tag">Predictive Modeling</span>
+                            <span class="tag">Team Leadership</span>
+                        </div>
+                        <p style="margin-top: 1rem; color: var(--accent); font-weight: 600;">Click to learn more →</p>
+                    </div>
+                </a>
+                <a href="project-tavi.html" style="text-decoration: none; color: inherit;">
+                    <div class="card fade-in stagger-3 project-card">
+                        <div class="project-image" style="width: 100%; height: 200px; background: linear-gradient(135deg, #1a4d6d 0%, #2d6a8e 100%); border-radius: 8px; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">
+                            ⚙️
+                        </div>
+                        <h3>Transcatheter Valve Analysis</h3>
+                        <p><strong>Collaboration:</strong> Medtronic (2015-2020)</p>
+                        <p>Extensive experimental and computational characterization of transcatheter aortic valves (CoreValve, Evolut R) using pulse duplicator systems, PIV/PTV measurements, and CFD simulations.</p>
+                        <div class="tags">
+                            <span class="tag">Experimental Validation</span>
+                            <span class="tag">Industrial Collaboration</span>
+                            <span class="tag">Device Testing</span>
+                        </div>
+                        <p style="margin-top: 1rem; color: var(--accent); font-weight: 600;">Click to learn more →</p>
+                    </div>
+                </a>
+                <div class="card fade-in stagger-3">
+                    <h3>Computational Haemodynamics Research</h3>
+                    <p><strong>Institution:</strong> University of Bern, ARTORG Center (2020-2024)</p>
+                    <p>Advanced fluid-structure interaction simulations for cardiovascular devices, including transcatheter aortic valves and tissue-engineered heart valves, with focus on valve calcification prediction.</p>
+                    <div class="tags">
+                        <span class="tag">FSI</span>
+                        <span class="tag">CFD</span>
+                        <span class="tag">HPC</span>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+    </section>
+
+    <section id="publications">
+        <div class="container">
+            <h2>Publications & conferences</h2>
+            
+            <div style="margin-bottom: 4rem;">
+                <h3 style="font-family: 'IBM Plex Sans', sans-serif; font-size: 1.8rem; color: var(--secondary); margin-bottom: 2rem; font-weight: 500;">Peer-reviewed journal articles</h3>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="year">2025</div>
+                        <p><strong>Tagliavini G., Holzner M., <u>Corso P.</u></strong> <a href="https://doi.org/10.1016/j.ijmultiphaseflow.2025.105365" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent); transition: color 0.3s;">"Modal analysis reveals imprint of snowflake shape on wake flow structures"</a> <em>International Journal of Multiphase Flow</em>, 193:105365</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="year">2025</div>
+                        <p><strong>Mokhtari A., <u>Corso P.</u>, Jung B., et al.</strong> <a href="https://doi.org/10.1016/j.compbiomed.2025.110405" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent); transition: color 0.3s;">"Comparison of 4D flow MRI and computational fluid dynamics in carotid models with different stenosis levels"</a> <em>Computers in Biology and Medicine</em>, 194:110405</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="year">2024</div>
+                        <p><strong><u>Corso P.</u>, Obrist D.</strong> <a href="https://doi.org/10.1016/j.compbiomed.2024.108552" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent); transition: color 0.3s;">"On the role of aortic valve architecture for physiological hemodynamics and valve replacement. Part II: spectral analysis and anisotropy"</a> <em>Computers in Biology and Medicine</em>, 176(11):108552</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="year">2024</div>
+                        <p><strong><u>Corso P.</u>, Obrist D.</strong> <a href="https://doi.org/10.1016/j.compbiomed.2024.108526" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent); transition: color 0.3s;">"On the role of aortic valve architecture for physiological hemodynamics and valve replacement. Part I: flow configuration and vortex dynamics"</a> <em>Computers in Biology and Medicine</em>, 176(11):108526</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="year">2023</div>
+                        <p><strong>Jahren S.E., Demirel C., Bornemann K.M., <u>Corso P.</u>, et al.</strong> <a href="https://doi.org/10.1063/5.0170583" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent); transition: color 0.3s;">"Altered blood flow due to larger aortic diameters in patients with transcatheter heart valve thrombosis"</a> <em>APL Bioengineering</em>, 7(4):046120</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="year">2023</div>
+                        <p><strong>Tsolaki E., <u>Corso P.</u> (co-first author), Zboray R. et al.</strong> <a href="https://doi.org/10.1016/j.actbio.2023.07.044" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent); transition: color 0.3s;">"Multiscale Multimodal Investigation and Simulation of Structural Alterations in Failed Bioprosthetic Heart Valves"</a> <em>Acta Biomaterialia</em>, 169(1):138-154</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="year">2021</div>
+                        <p><strong>Krol Q., Fouxon I., <u>Corso P.</u>, Holzner M.</strong> <a href="https://doi.org/10.1029/2021GL094694" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent); transition: color 0.3s;">"Local hydraulic resistance in heterogeneous porous media"</a> <em>Geophysical Research Letters</em>, 88(22):e2021GL094694</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="year">2021</div>
+                        <p><strong>Tagliavini G., McCorquodale M., Westbrook Ch., <u>Corso P.</u>, Krol Q., Holzner M.</strong> <a href="https://doi.org/10.1016/j.ijmultiphaseflow.2021.103652" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent); transition: color 0.3s;">"Drag coefficient prediction of complex-shaped snow particles falling in air beyond the Stokes regime"</a> <em>International Journal of Multiphase Flow</em>, 140(1):103652</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="year">2021</div>
+                        <p><strong><u>Corso P.</u>, Walheim J., Dillinger H., et al.</strong> <a href="https://doi.org/10.1002/mrm.28795" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent); transition: color 0.3s;">"Toward an accurate estimation of wall shear stress from 4D flow magnetic resonance downstream of a severe stenosis"</a> <em>Magnetic Resonance in Medicine</em>, 86(3):1531-1543</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="year">2021</div>
+                        <p><strong><u>Corso P.</u>, Giannakopoulos G., Gülan U., Frouzakis E.Ch., Holzner M.</strong> <a href="https://doi.org/10.1109/TBME.2020.3018173" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent); transition: color 0.3s;">"A Novel Estimation Approach of Pressure Gradient and Haemodynamic Stresses as Indicators of Pathological Aortic Flow Using Subvoxel Modelling"</a> <em>IEEE Transactions on Biomedical Engineering</em>, 68(3):980-991</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="year">2019</div>
+                        <p><strong>Gülan U., Appa H., <u>Corso P.</u>, et al.</strong> <a href="https://doi.org/10.1111/aor.13504" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent); transition: color 0.3s;">"Performance of the Transcatheter Aortic-Valve Implantation (TAVI) on Blood Flow Hemodynamics: An Optical Imaging-based In Vitro Study"</a> <em>Artificial Organs</em>, 43(10):282-293</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="year">2019</div>
+                        <p><strong><u>Corso P.</u>, Gülan U., Cohrs N., et al.</strong> <a href="https://doi.org/10.1007/s10439-019-02289-y" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent); transition: color 0.3s;">"Comprehensive in vitro study of the flow past two transcatheter aortic valves: comparison with a severe stenotic case"</a> <em>Annals of Biomedical Engineering</em>, 47(9):2241-2257</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 4rem;">
+                <h3 style="font-family: 'IBM Plex Sans', sans-serif; font-size: 1.8rem; color: var(--secondary); margin-bottom: 2rem; font-weight: 500;">Selected conference presentations</h3>
+                <div class="research-grid">
+                    <a href="https://www.researchgate.net/publication/395349833_Deep_generative_super-resolution_for_enhanced_mouse_brain_imaging_and_optical_blood_flow_measurements" target="_blank" style="text-decoration: none; color: inherit;">
+                        <div class="card fade-in stagger-1 conference-card" style="background-image: url('conference-barcelona-2025.jpg'); background-size: cover; background-position: center;">
+                            <div class="conference-overlay">
+                                <h3>2025 | Barcelona, Spain</h3>
+                                <p><strong>20<sup>th</sup> International Symposium on Computer Methods in Biomechanics and Biomedical Engineering</strong></p>
+                                <p>"Deep generative super-resolution for enhanced mouse brain imaging and optical blood flow measurements"</p>
+                                <p style="margin-top: 1rem; color: var(--accent); font-weight: 600;">View on ResearchGate →</p>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="https://www.researchgate.net/publication/395348029_Modal_analysis_reveals_aortic_valve_design_effects_on_blood_flow_patterns" target="_blank" style="text-decoration: none; color: inherit;">
+                        <div class="card fade-in stagger-1 conference-card" style="background-image: url('conference-dublin-2025.jpg'); background-size: cover; background-position: center;">
+                            <div class="conference-overlay">
+                                <h3>2025 | Dublin, Ireland</h3>
+                                <p><strong>2<sup>nd</sup> European Fluid Dynamics Conference</strong></p>
+                                <p>"Modal analysis reveals aortic valve design effects on blood flow patterns"</p>
+                                <p style="margin-top: 1rem; color: var(--accent); font-weight: 600;">View on ResearchGate →</p>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="https://www.researchgate.net/publication/YOUR_PUBLICATION_ID_3" target="_blank" style="text-decoration: none; color: inherit;">
+                        <div class="card fade-in stagger-2 conference-card" style="background-image: url('conference-zuerich-2025.jpg'); background-size: cover; background-position: center;">
+                            <div class="conference-overlay">
+                                <h3>2025 | Zurich, Switzerland</h3>
+                                <p><strong>30<sup>th</sup> Congress of the European Society of Biomechanics</strong></p>
+                                <p>"Computational analysis of wall shear stress and strain-based metrics as calcification indicators in tissue and polymeric prosthetic aortic valves"</p>
+                                <p style="margin-top: 1rem; color: var(--accent); font-weight: 600;">View on ResearchGate →</p>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="https://www.researchgate.net/publication/384194864_How_do_polymeric_aortic_valves_perform_A_computational_study_of_blood-structure_dynamics_under_various_material_and_geometrical_conditions" target="_blank" style="text-decoration: none; color: inherit;">
+                        <div class="card fade-in stagger-2 conference-card" style="background-image: url('conference-aachen-2024.jpg'); background-size: cover; background-position: center;">
+                            <div class="conference-overlay">
+                                <h3>2024 | Aachen, Germany</h3>
+                                <p><strong>1<sup>st</sup> European Fluid Dynamics Conference</strong></p>
+                                <p>"How do polymeric aortic valves perform? A computational study of blood-structure dynamics"</p>
+                                <p style="margin-top: 1rem; color: var(--accent); font-weight: 600;">View on ResearchGate →</p>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="https://www.researchgate.net/publication/372338720_Numerical_prediction_of_calcific_regions_in_bioprosthetic_heart_valves_correlating_imaging_and_simulation_data" target="_blank" style="text-decoration: none; color: inherit;">
+                        <div class="card fade-in stagger-2 conference-card" style="background-image: url('conference-maastricht-2023.jpg'); background-size: cover; background-position: center;">
+                            <div class="conference-overlay">
+                                <h3>2023 | Maastricht, Netherlands</h3>
+                                <p><strong>28<sup>th</sup> Congress of the European Society of Biomechanics</strong></p>
+                                <p>"Numerical prediction of calcific regions in bioprosthetic heart valves"</p>
+                                <p style="margin-top: 1rem; color: var(--accent); font-weight: 600;">View on ResearchGate →</p>
+                            </div>
+                        </div>
+                </div>
+                <p style="margin-top: 2rem; text-align: center; color: var(--secondary); font-style: italic;">10+ international conference presentations spanning fluid mechanics, biomechanics and computer methods</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="funding">
+        <div class="container">
+            <h2>Project proposals submitted as Principal Investigator</h2>
+            
+            <div class="timeline" style="margin-top: 3rem;">
+                <div class="timeline-item">
+                    <div class="year">2025</div>
+                    <h3>FNRS Research Associate ("Chercheur Qualifié") Grant</h3>
+                    <div class="institution">Belgian National Science Foundation (F.R.S.-FNRS)</div>
+                    <p><strong>Status:</strong> <span class="highlight">Rated "Excellent"</span> | Not granted (5% success rate)</p>
+                    <p>Independent research position proposal for the iValve Platform combining multiphysics simulations with AI-driven optimisation of patient-specific polymeric aortic valves.</p>
+                    <p><strong>Host:</strong> Prof. Benoît Haut, Université libre de Bruxelles (ULB)</p>
+                </div>    
+                <div class="timeline-item">
+                    <div class="year">2024 - 2025</div>
+                    <h3>Swiss National Supercomputing Centre (CSCS) Grant</h3>
+                    <div class="institution">210,000 CHF equivalent in computing resources | Project ID s1284</div>
+                    <p><strong>Status:</strong> <span class="highlight">Granted</span></p>
+                    <p>Geometrical and material parameter optimisation of 3D-printed silicone aortic valves from computational data.</p>
+                </div>     
+                <div class="timeline-item">
+                    <div class="year">2024</div>
+                    <h3>SNSF Ambizione Grant</h3>
+                    <div class="institution">Swiss National Science Foundation</div>
+                    <p><strong>Status:</strong> Not granted (15% success rate)</p>
+                    <p>Independent group leader position for MLAVOpt: data-driven platform for customised polymeric valve design and optimisation.</p>
+                    <p><strong>Host:</strong> Prof. Filippo Coletti, ETH Zurich</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="year">2024</div>
+                    <h3>SNSF-BRIDGE Proof of Concept Grant</h3>
+                    <div class="institution">Swiss National Science Foundation | Innosuisse</div>
+                    <p><strong>Status:</strong> Not granted (16% success rate)</p>
+                    <p>Commercialisation pathway for 3D-printed silicone valve prosthesis using in vitro-in silico platform to translate calcification insights into improved durability.</p>
+                    <p><strong>Host:</strong> Prof. Carlo Menon, ETH Zurich</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="year">2023 – 2024</div>
+                    <h3>Swiss National Supercomputing Centre (CSCS) Grant</h3>
+                    <div class="institution">215,600 CHF equivalent in computing resources | Project ID s1210</div>
+                    <p><strong>Status:</strong> <span class="highlight">Granted</span></p>
+                    <p>3D-printed aortic valves in patient-specific aorta: computational performance study.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="year">2022 – 2023</div>
+                    <h3>Swiss National Supercomputing Centre (CSCS) Grant</h3>
+                    <div class="institution">43,750 CHF equivalent in computing resources | Project ID s1153</div>
+                    <p><strong>Status:</strong> <span class="highlight">Granted</span></p>
+                    <p>Leaflet motion and flow characteristics of 3D-printed fibre-reinforced aortic valves.</p>
+                </div>
+            <p style="margin-top: 3rem; text-align: center; color: var(--text); font-style: italic;">Total funded computing resources: ~470,000 CHF equivalent | Multiple competitive proposals with excellent ratings</p>
+        </div>
+    </section>
+
+    <section id="education">
+        <div class="container">
+            <h2>Experience & training</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="year">2025 - 2026</div>
+                    <h3>CAS in Entrepreneurial Leadership in Technology Ventures</h3>
+                    <div class="institution">ETH Zurich, Switzerland</div>
+                    <p>Advanced training in technology entrepreneurship, venture creation and business development for deep-tech startups.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="year">2024 - 2025</div>
+                    <h3>Scientific Collaborator</h3>
+                    <div class="institution">Swiss Data Science Center (SDSC), ETH Zurich, Switzerland</div>
+                    <p>Developed deep generative models for spatial resolution enhancement in biomedical imaging. Collaboration with two biology laboratories at École Polytechnique Fédérale de Lausaunne (EPFL) on mouse brain lipid distribution analysis using mass spectrometry data.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="year">2020 - 2024</div>
+                    <h3>Postdoctoral Researcher</h3>
+                    <div class="institution">University of Bern, ARTORG Center for Biomedical Engineering Research, Switzerland</div>
+                    <p>Head of computational haemodynamics research group (2021-2023), mentoring 5 postgraduate students. Developed high-fidelity fluid-structure interaction simulations for bioprosthetic as digital twins of cardiovascular physics. Research focused on correlating haemodynamic and biomechanical indicators with calcification propensity, characterising transition-to-turbulence downstream of prosthetic valves through spectral and modal analysis and investigating vorticity transport mechanisms. Coordinated collaborative research with ETH Zurich, Swiss Federal Laboratories for Materials Science and Technology and Università della Svizzera italiana.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="year">2015 - 2020</div>
+                    <h3>Scientific Assistant & Doctoral Candidate</h3>
+                    <div class="institution">ETH Zurich, Institute of Environmental Engineering, Switzerland</div>
+                    <p><strong>Degree:</strong> Doctor of Sciences (Dr sc. ETH Zurich) in Biomedical Flows and Engineering</p>
+                    <p><strong>Dissertation:</strong></p> <a href="https://www.research-collection.ethz.ch/entities/publication/35ef5d09-e867-40d8-8f7b-41d0c9e19dff" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent);">Computational and experimental investigation of disturbed aortic flows – novel methods to assess flow abnormalities due to severe stenoses and prosthetic aortic valves</a>
+                    <p><strong>Research:</strong> Turbulent transitions downstream of stenotic and transcatheter aortic valves. Combined high-resolution computational fluid dynamics (DNS, LES) with experimental techniques (3D-PTV at 2000 fps, 4D Flow MRI, pulse duplicator systems).</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="year">2014</div>
+                    <h3>Scientific Assistant</h3>
+                    <div class="institution"> Faculty of Engineering, University of Mons, Belgium</div>
+                    <p><strong>Salary award:</strong> Research position funded by the Halleux-Mirland endowment, awarded to outstanding engineering Master's graduates</p>
+                    <p><strong>Project:</strong> Computational and experimental study of flow-diverter stent filtration in aortic arch applications. Applied intracranial aneurysm methods to aortic flows using Particle Image Velocimetry (PIV) measurements and CFD simulations.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="year">2011 - 2013</div>
+                    <h3>Master of Sciences in Mechanical Engineering</h3>
+                    <div class="institution">Faculty of Engineering, University of Mons, Belgium</div>
+                    <p><strong>Degree (magna cum laude):</strong> Master of Sciences in Mechanical Engineering, specialisation in energy production systems</p>
+                    <p><strong>Thesis:</strong> Intracranial aneurysm haemodynamics with flow-diverter stents using PIV measurements and COMSOL Multiphysics simulations.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills">
+        <div class="container">
+            <h2>Skills & interests</h2>
+            <div class="skills-container">
+                <div class="skill-category fade-in stagger-1">
+                    <h3>Computational methods</h3>
+                    <ul>
+                        <li>Direct Numerical Simulations (DNS)</li>
+                        <li>Large-Eddy Simulations (LES)</li>
+                        <li>Fluid-Structure Interaction (FSI)</li>
+                        <li>Finite-Element Analysis (FEA)</li>
+                        <li>High-Performance Computing (HPC)</li>
+                        <li>GPU-accelerated computing</li>
+                        <li>Bayesian optimisation</li>
+                    </ul>
+                </div>
+                <div class="skill-category fade-in stagger-2">
+                    <h3>Machine learning & AI</h3>
+                    <ul>
+                        <li>Variational Autoencoders (VAE)</li>
+                        <li>Latent diffusion models</li>
+                        <li>Super-resolution architectures</li>
+                        <li>U-Net for medical image segmentation</li>
+                        <li>Unsupervised classification</li>
+                    </ul>
+                </div>
+                <div class="skill-category fade-in stagger-3">
+                    <h3>Experimental techniques</h3>
+                    <ul>
+                        <li>3D Particle Tracking Velocimetry (3D-PTV)</li>
+                        <li>Particle Image Velocimetry (PIV)</li>
+                        <li>4D Flow MRI</li>
+                        <li>Pulse duplicator systems</li>
+                        <li>Silicone phantom testing</li>
+                    </ul>
+                </div>
+                <div class="skill-category fade-in stagger-4">
+                    <h3>Software & languages</h3>
+                    <ul>
+                        <li>Programming: Python, MATLAB, C++, FORTRAN</li>
+                        <li>CFD: <a href="https://nek5000.mcs.anl.gov/" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent);">NEK5000</a>, <a href="https://www.openfoam.com/" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent);">OpenFOAM</a></li>
+                        <li>FEA: <a href="https://mooseframework.inl.gov/" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent);">MOOSE framework</a></li>
+                        <li>ML: PyTorch, TensorFlow, scikit-learn</li>
+                        <li>Languages: French (native), Italian (native), English (C2), Dutch (B2), German (B1)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <div class="container">
+            <h2>Get in touch</h2>
+            <div class="contact-grid">
+                <div class="contact-card fade-in stagger-1">
+                    <div class="contact-icon">🎓</div>
+                    <h3>Academic profiles</h3>
+                    <p><a href="https://scholar.google.com/citations?user=stRLORMAAAAJ&hl=en" target="_blank">Google Scholar</a></p>
+                    <p><a href="https://www.researchgate.net/profile/Pascal-Corso-2?ev=hdr_xprf" target="_blank">ResearchGate</a></p><p><a href="https://orcid.org/0000-0001-7875-1080" target="_blank">ORCID</a></p>
+                </div>
+                <div class="contact-card fade-in stagger-2">
+                    <div class="contact-icon">💼</div>
+                    <h3>Professional network</h3>
+                    <p><a href="https://www.linkedin.com/in/pascal-corso-9a334b97/" target="_blank">LinkedIn</a></p>
+                </div>
+                <div class="contact-card fade-in stagger-3">
+                    <div class="contact-icon">📧</div>
+                    <h3>Email</h3>
+                    <p><a href="mailto:pascal.corso@sdsc.ethz.ch">pascal.corso@sdsc.ethz.ch</a></p>
+                </div>
+                <div class="contact-card fade-in stagger-4">
+                    <div class="contact-icon">🏢</div>
+                    <h3>Institution</h3>
+                    <p>ETH Zurich</p>
+                </div>
+            </div>
+            <div style="margin-top: 3rem; text-align: center; font-size: 1.05rem; line-height: 1.8;">
+                <p><strong>Current Location:</strong> Switzerland (Zurich)</p>
+                <p><strong>Nationality:</strong> Belgian & Italian</p>
+                <p><strong>Open to:</strong> Research collaborations, consulting, speaking engagements</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Dr Pascal Corso. All rights reserved.</p>
+            <p style="margin-top: 1rem; opacity: 0.7;">Advancing cardiovascular health through computational and experimental innovation</p>
+            <p style="margin-top: 1rem; opacity: 0.7; font-size: 0.9rem;">
+                Website content licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" style="color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent);">CC BY 4.0</a>
+            </p>
+        </div>
+    </footer>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        // Smooth scrolling for navigation
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all cards and timeline items
+        document.querySelectorAll('.card, .timeline-item, .skill-category, .contact-card').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Add hover effect to cards
+           document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px) scale(1.02)';
+            });
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Carousel functionality
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.carousel-slide');
+        const indicators = document.querySelectorAll('.carousel-indicator');
+        const track = document.querySelector('.carousel-track');
+
+        function updateCarousel() {
+            track.style.transform = `translateX(-${currentSlide * 100}%)`;
+            
+            // Update indicators
+            indicators.forEach((indicator, index) => {
+                indicator.classList.toggle('active', index === currentSlide);
+            });
+        }
+
+        function moveSlide(direction) {
+            currentSlide += direction;
+            
+            // Loop around
+            if (currentSlide < 0) {
+                currentSlide = slides.length - 1;
+            } else if (currentSlide >= slides.length) {
+                currentSlide = 0;
+            }
+            
+            updateCarousel();
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            updateCarousel();
+        }
+
+        // Initialize carousel
+        updateCarousel();
+    </script>
+</body>
+</html>
