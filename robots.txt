@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://pascal-corso.github.io/sitemap.xml
