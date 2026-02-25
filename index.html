@@ -786,6 +786,81 @@
         .stagger-2 { animation-delay: 0.2s; }
         .stagger-3 { animation-delay: 0.3s; }
         .stagger-4 { animation-delay: 0.4s; }
+
+        .about-news-grid {
+            display: grid;
+            grid-template-columns: 3fr 2fr;
+            gap: 4rem;
+            align-items: start;
+        }
+        
+        .news-feed {
+            border-left: 3px solid var(--border);
+            padding-left: 2rem;
+        }
+        
+        .news-feed h2 {
+            font-size: 2.2rem;
+        }
+        
+        .news-item {
+            padding: 1.2rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .news-item:last-child {
+            border-bottom: none;
+        }
+        
+        .news-item .news-date {
+            font-size: 0.85rem;
+            color: var(--accent);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.3rem;
+        }
+        
+        .news-tag {
+            display: inline-block;
+            font-size: 0.75rem;
+            background: var(--light);
+            color: var(--secondary);
+            padding: 0.15rem 0.6rem;
+            border-radius: 12px;
+            font-weight: 500;
+            margin-bottom: 0.4rem;
+        }
+        
+        .news-item p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--text);
+        }
+        
+        .news-item a {
+            color: var(--primary);
+            text-decoration: none;
+            border-bottom: 1px solid var(--accent);
+            transition: color 0.3s;
+        }
+        
+        .news-item a:hover {
+            color: var(--accent);
+        }
+        
+        @media (max-width: 768px) {
+            .about-news-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+            .news-feed {
+                border-left: none;
+                border-top: 3px solid var(--border);
+                padding-left: 0;
+                padding-top: 2rem;
+            }
+        }
     </style>
     <script type="application/ld+json">
     {
@@ -929,7 +1004,7 @@
         </ul>
     </nav>
 
-    <section id="about">
+    <!--<section id="about">
         <div class="container">
             <h2>About me</h2>
             <p style="max-width: 800px; font-size: 1.1rem; line-height: 1.9;">
@@ -939,6 +1014,62 @@
                 I am currently expanding my research into academic and entrepreneurial efforts for next-generation aortic valve designs, combining experimental flow measurements with advanced computational methods. I secured over <span class="highlight">650,000 node-hours on hybrid supercomputing nodes</span> for this work, permitting comprehensive performance evaluation prior to prototyping and animal testing. My recent position at the Swiss Data Science Center strengthened my <span class="highlight">machine learning</span> capabilities, which I now integrate into a <span class="highlight">valve optimisation platform</span>. I am also pursuing a CAS in Entrepreneurial Leadership in Technology Ventures at ETH Zurich, bridging the gap between academic innovation and real-world medical applications.
             </p>
         </div>
+    </section>-->
+    <section id="about">
+    <div class="container">
+        <div class="about-news-grid">
+            <!-- LEFT: About me -->
+            <div>
+                <h2>About me</h2>
+                <p style="font-size: 1.1rem; line-height: 1.9;">
+                    As a researcher specialised in <span class="highlight">cardiovascular biomechanics</span>, computational and experimental <span class="highlight">fluid dynamics</span>, I aim to advance <span class="highlight">prosthetic heart valve technology</span>. A decade studying aortic flow abnormalities underpins methods that evaluate valve performance and steer the design of longer-lasting artificial valves with better haemodynamics. My research trajectory reflects deliberate progression toward improving <span class="highlight">cardiovascular prosthesis design</span>. Beginning with flow-diverter stents during my mechanical engineering studies at the University of Mons (2008–2013), I advanced to examining, through doctoral research, turbulent transitions downstream of stenotic and artificial aortic valves at ETH Zurich (2016–2020). As a postdoctoral researcher at the University of Bern (2020–2024), I led the computational haemodynamics sub-group while investigating fluid–structure interaction mechanisms underlying valve calcification and flow disturbances in bioprosthetic aortic valves, yielding crucial insights into failure modes and leaflet-design-dependent behaviour.
+                </p>
+                <p style="font-size: 1.1rem; line-height: 1.9; margin-top: 1.5rem;">
+                    I am currently expanding my research into academic and entrepreneurial efforts for next-generation aortic valve designs, combining experimental flow measurements with advanced computational methods. I secured over <span class="highlight">650,000 node-hours on hybrid supercomputing nodes</span> for this work, permitting comprehensive performance evaluation prior to prototyping and animal testing. My recent position at the Swiss Data Science Center strengthened my <span class="highlight">machine learning</span> capabilities, which I now integrate into a <span class="highlight">valve optimisation platform</span>. I am also pursuing a CAS in Entrepreneurial Leadership in Technology Ventures at ETH Zurich, bridging the gap between academic innovation and real-world medical applications.
+                </p>
+            </div>
+
+            <!-- RIGHT: News feed -->
+            <div class="news-feed">
+                <h2>News</h2>
+
+                <div class="news-item">
+                    <div class="news-date">Mar 2026 - Upcoming</div>
+                    <span class="news-tag seminar">Seminar</span>
+                    <p>Invited seminar at <strong>EPFL</strong>, Lausanne - <a href="https://memento.epfl.ch/event/prosthetic-aortic-valve-performance-assessment-fsi/" target="_blank">"Prosthetic aortic valve performance assessment: FSI simulations, spectral analysis and FTLE-based calcification prediction"</a>.</p>
+                    <p><strong>Date, time, place:</strong> 10 March 2026, 16:15, CM 1 517.</p>
+                </div>
+
+                <div class="news-item">
+                    <div class="news-date">Feb 2026 - Under review</div>
+                    <span class="news-tag grant">Grant</span>
+                    <p><strong>Innoviris "Brains for Brussels" 2026</strong>, under review.</p>
+                    <p><strong>Proposal title:</strong> Automated Design And Personalised Tissue-engineered Aortic Valves.</p>
+                    <p><strong>Host:</strong> Prof. B. Haut, Université libre de Bruxelles (ULB).</p>
+                    <p><strong>Collaborative support:</strong> Dr F. Vanden Eynden, Hôpital Universitaire de Bruxelles (H.U.B.), Prof. J. Goole (ULB).</p>
+                </div>
+
+                <div class="news-item">
+                    <div class="news-date">Jan 2026 - Under review</div>
+                    <span class="news-tag grant">Grant</span>
+                    <p><strong>F.R.S.-FNRS Research Associate ("Chercheur Qualifié") 2026</strong>, under review.</p>
+                    <p><strong>Proposal title:</strong> Integrated Multiphysics Simulations and Machine Learning for the Automated Optimisation of Patient-Specific Polymeric Aortic Valves across Haemodynamics, Durability and Mechanics.</p>
+                    <p><strong>Host:</strong> Prof. B. Haut, ULB.</p>
+                    <p><strong>Collaborative support:</strong> Prof. C. Oury (Université de Liège), Prof. U. Morbiducci (Politecnico di Torino), Dr S. Celi (Fondazione Toscana G. Monasterio).</p>
+                </div>
+
+                <div class="news-item">
+                    <div class="news-date">Oct 2025 - Under review</div>
+                    <span class="news-tag fellowship">Fellowship</span>
+                    <p><strong>IRIS (ULB/VUB, MSCA COFUND) fellowship</strong>, under review.</p>
+                    <p><strong>Proposal title:</strong> Automated Design and Personalised Tissue-engineered Aortic Valves.</p>
+                    <p><strong>Host:</strong> Prof. B. Haut, ULB.</p>
+                    <p><strong>Collaborative support:</strong> Dr F. Vanden Eynden (H.U.B.), Prof. J. Goole (ULB), Prof. U. Morbiducci (Politecnico di Torino), Dr S. Celi (Fondazione Toscana G. Monasterio).</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
     </section>
 
     <section id="research">
@@ -984,7 +1115,7 @@
                         <div class="project-image" style="background-image: url('aortaflow-pic.jpg');"></div>
                         <h3>Performance evaluation of polymeric aortic valves</h3>
                         <p><strong>Role:</strong> Project lead</p>
-                        <p><strong>Collaboration:</strong> Dr Fergal Coulter, ETH Zurich</p>
+                        <p><strong>Collaboration:</strong> Dr F. Coulter, ETH Zurich</p>
                         <p>Comparing 3D-printed polymeric valves (two leaflet designs) to biological counterparts through FSI simulations on HPC infrastructure. Unsupervised clustering of haemodynamic-derived and leaflet-strain-based metrics classifies calcification risk. Flow and leaflet motion analyses characterise pathological patterns and transitional laminar-to-turbulent structures downstream.</p>
                         <div class="tags">
                             <span class="tag">Polymeric valves</span>
@@ -1127,8 +1258,8 @@
                     <p><strong>Status:</strong> <span class="highlight">Rated "A - Excellent"</span> | Not granted (5% success rate)</p>
                     <p><strong>Submitted:</strong> January 2025 | Resubmission permitted</p>
                     <p>Independent research position proposal for the iValve Platform combining multiphysics simulations with AI-driven optimisation of patient-specific polymeric aortic valves.</p>
-                    <p><strong>Host:</strong> Prof. Benoît Haut, Université libre de Bruxelles (ULB)</p>
-                    <p><strong>Collaborative support:</strong> ETH Zurich (Dr Fergal Coulter), Swiss Data Science Center (Dr Ekaterina Krymova), Politecnico di Torino (Prof. Umberto Morbiducci)</p>
+                    <p><strong>Host:</strong> Prof. B. Haut, Université libre de Bruxelles (ULB)</p>
+                    <p><strong>Collaborative support:</strong> ETH Zurich (Dr F. Coulter), Swiss Data Science Center (Dr E. Krymova), Politecnico di Torino (Prof. U. Morbiducci)</p>
                 </div>    
                 <div class="timeline-item">
                     <div class="year">2024 - 2025</div>
@@ -1145,7 +1276,7 @@
                     <p><strong>Submitted:</strong> November 2024</p>
                     <p>Independent group leader position for MLAVOpt: data-driven platform for customised polymeric valve design and optimisation.</p>
                     <p><strong>Host:</strong> Prof. Filippo Coletti, ETH Zurich</p>
-                    <p><strong>Collaborative support:</strong> ETH Zurich (Dr Fergal Coulter), Swiss Data Science Center (Dr Ekaterina Krymova), Politecnico di Torino (Prof. Umberto Morbiducci)</p>
+                    <p><strong>Collaborative support:</strong> ETH Zurich (Dr F. Coulter), Swiss Data Science Center (Dr E. Krymova), Politecnico di Torino (Prof. U. Morbiducci)</p>
                 </div>
                 <div class="timeline-item">
                     <div class="year">2024</div>
@@ -1155,7 +1286,7 @@
                     <p><strong>Submitted:</strong> August 2024</p>
                     <p>Commercialisation pathway for 3D-printed elastomeric valve prosthesis using in vitro-in silico platform to translate calcification insights into improved durability.</p>
                     <p><strong>Host:</strong> Prof. Carlo Menon, ETH Zurich</p>
-                    <p><strong>Collaborative support:</strong> Dr Fergal Coulter, ETH Zurich</p>
+                    <p><strong>Collaborative support:</strong> Dr F. Coulter, ETH Zurich</p>
                     <p><strong>Industry support:</strong> Hi-D Imaging AG (CEO letter)</p>
                     <p><strong>Academic support:</strong> Ingenuity Lab Zurich (group head letter)</p>
                 </div>
@@ -1205,7 +1336,7 @@
                     <div class="institution">ETH Zurich, Institute of Environmental Engineering, Switzerland</div>
                     <p><strong>Degree:</strong> Doctor of Sciences (Dr sc. ETH Zurich) in Biomedical Flows and Engineering</p>
                     <p><strong>Dissertation:</strong></p> <a href="https://www.research-collection.ethz.ch/entities/publication/35ef5d09-e867-40d8-8f7b-41d0c9e19dff" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent);">Computational and experimental investigation of disturbed aortic flows – novel methods to assess flow abnormalities due to severe stenoses and prosthetic aortic valves</a>
-                    <p><strong>Examiners:</strong> Prof. Roman Stocker (ETH Zurich), Dr Markus Holzner (ETH Zurich/Eawag/WSL), Dr Christos Emmanouil Frouzakis (ETH Zurich), Prof. Umberto Morbiducci (Politecnico di Torino)</p>
+                    <p><strong>Examiners:</strong> Prof. R. Stocker (ETH Zurich), Dr M. Holzner (ETH Zurich/Eawag/WSL), Dr Ch. E. Frouzakis (ETH Zurich), Prof. U. Morbiducci (Politecnico di Torino)</p>
                     <p><strong>Research:</strong> Turbulent transitions downstream of stenotic and transcatheter aortic valves. Combined high-resolution computational fluid dynamics (DNS, LES) with experimental techniques (3D-PTV at 2000 fps, 4D Flow MRI, pulse duplicator systems).</p>
                 </div>
                 <div class="timeline-item">
