@@ -302,7 +302,7 @@
 
         h1 {
             font-family: 'IBM Plex Sans', sans-serif;
-            font-size: 4rem;
+            font-size: 3.5rem;
             font-weight: 300;
             margin-bottom: 1rem;
             letter-spacing: -0.02em;
@@ -418,6 +418,71 @@
             background: var(--accent);
         }
 
+        /* ── Collapsible section controls ── */
+        .section-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            margin-bottom: 0;
+        }
+
+        .toggle-btn {
+            background: none;
+            border: 2px solid var(--border);
+            border-radius: 50%;
+            width: 38px;
+            height: 38px;
+            min-width: 38px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.25s ease, border-color 0.25s ease;
+            margin-top: 0.55rem;
+            flex-shrink: 0;
+        }
+
+        .toggle-btn:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .toggle-btn:hover svg {
+            fill: white;
+        }
+
+        .toggle-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--primary);
+            transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .toggle-btn.collapsed svg {
+            transform: rotate(-90deg);
+        }
+
+        .section-body {
+            overflow: hidden;
+            transition: max-height 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+            max-height: 20000px;
+            opacity: 1;
+            /* Pull the clipping boundary leftward so absolutely-positioned
+               timeline dots (left: -3.5rem) are not sliced off */
+            margin-left: -1rem;
+            padding-left: 1rem;
+        }
+
+        .section-body.collapsed {
+            max-height: 0;
+            opacity: 0;
+        }
+        /* ── End collapsible section controls ── */
+
         .research-grid, .project-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -504,28 +569,16 @@
 
         .project-image {
             width: 100%;
-            height: 150px;              /* ✓ Added */
-            border-radius: 8px;          /* ✓ Added */
-            margin-bottom: 1.5rem;       /* ✓ Added */
-            background-size: cover;      /* ✓ Added */
-            background-position: center; /* ✓ Added */
+            height: 150px;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            background-size: cover;
+            background-position: center;
             transition: transform 0.4s ease;
         }
 
         .project-card:hover .project-image {
             transform: scale(1);
-        }
-
-        .profile-photo {
-            animation: fadeIn 1s ease-out 0.8s both;
-        }
-
-        .profile-photo img {
-            transition: transform 0.3s ease;
-        }
-
-        .profile-photo:hover img {
-            transform: scale(1.05);
         }
 
         .card h3 {
@@ -628,6 +681,33 @@
         .timeline-item a:hover {
             color: var(--accent);
             border-bottom-color: var(--primary);
+        }
+
+        /* Status badge for proposals */
+        .status-badge {
+            display: inline-block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 0.2rem 0.65rem;
+            border-radius: 12px;
+            margin-left: 0.6rem;
+            vertical-align: middle;
+            letter-spacing: 0.02em;
+        }
+        .status-badge.under-review {
+            background: #fdf6e3;
+            color: #7a5800;
+            border: 1px solid #e6c96a;
+        }
+        .status-badge.granted {
+            background: #edf5ee;
+            color: #2d6a3f;
+            border: 1px solid #7dc48a;
+        }
+        .status-badge.excellent {
+            background: #edf5ee;
+            color: #2d6a3f;
+            border: 1px solid #7dc48a;
         }
 
         .skills-container {
@@ -837,7 +917,7 @@
         .news-tag.grant      { background: #fdf6e3; color: #7a5800; }
         .news-tag.fellowship { background: #edf5ee; color: #2d6a3f; }
         .news-tag.preprint   { background: #f0eaf5; color: #5a3272; }
-        .news-tag.editorial { background: #fdeae8; color: #7a2a1a; }
+        .news-tag.editorial  { background: #fdeae8; color: #7a2a1a; }
         
         .news-item p {
             font-size: 0.95rem;
@@ -1011,17 +1091,6 @@
         </ul>
     </nav>
 
-    <!--<section id="about">
-        <div class="container">
-            <h2>About me</h2>
-            <p style="max-width: 800px; font-size: 1.1rem; line-height: 1.9;">
-                As a researcher specialised in <span class="highlight">cardiovascular biomechanics</span>, computational and experimental <span class="highlight">fluid dynamics</span>, I aim to advance <span class="highlight">prosthetic heart valve technology</span>. A decade studying aortic flow abnormalities underpins methods that evaluate valve performance and steer the design of longer-lasting artificial valves with better haemodynamics. My research trajectory reflects deliberate progression toward improving <span class="highlight">cardiovascular prosthesis design</span>. Beginning with flow-diverter stents during my mechanical engineering studies at the University of Mons (2008-2013), I advanced to examining, through doctoral research, turbulent transitions downstream of stenotic and artificial aortic valves at ETH Zurich (2016-2020). As a postdoctoral researcher at the University of Bern (2020-2024), I led the computational haemodynamics sub-group while investigating fluid-structure interaction mechanisms underlying valve calcification and flow disturbances in bioprosthetic aortic valves, yielding crucial insights into failure modes and leaflet-design-dependent behaviour.
-            </p>
-            <p style="max-width: 800px; font-size: 1.1rem; line-height: 1.9; margin-top: 1.5rem;">
-                I am currently expanding my research into academic and entrepreneurial efforts for next-generation aortic valve designs, combining experimental flow measurements with advanced computational methods. I secured over <span class="highlight">650,000 node-hours on hybrid supercomputing nodes</span> for this work, permitting comprehensive performance evaluation prior to prototyping and animal testing. My recent position at the Swiss Data Science Center strengthened my <span class="highlight">machine learning</span> capabilities, which I now integrate into a <span class="highlight">valve optimisation platform</span>. I am also pursuing a CAS in Entrepreneurial Leadership in Technology Ventures at ETH Zurich, bridging the gap between academic innovation and real-world medical applications.
-            </p>
-        </div>
-    </section>-->
     <section id="about">
     <div class="container">
         <div class="about-news-grid">
@@ -1100,11 +1169,7 @@
         <div class="container">
             <h2>Current projects</h2>
             <div class="research-grid">
-                <!-- <a href="project-durablevalve.html" style="text-decoration: none; color: inherit;"> -->
                     <div class="card fade-in stagger-1 project-card">
-                        <!-- <div class="project-image" style="width: 100%; height: 200px; background: linear-gradient(135deg, #1a4d6d 0%, #2d6a8e 100%); border-radius: 8px; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">
-                            🫀
-                        </div> -->
                         <div class="project-image" style="background-image: url('durablevalve-2-pic.jpg'); background-size: cover;">
                         </div>
                         <h3>Next-generation prosthetic aortic valve design</h3>
@@ -1115,11 +1180,8 @@
                             <span class="tag">FSI simulations</span>
                             <span class="tag">Medtech startup</span>
                         </div>
-                        <!-- <p style="margin-top: 1rem; color: var(--accent); font-weight: 600;">Click to learn more →</p> -->
                     </div>
-                <!-- </a> -->
 
-                <!-- <a href="project-durablevalve.html" style="text-decoration: none; color: inherit;"> -->
                     <div class="card fade-in stagger-1 project-card">
                         <div class="project-image" style="background-image: url('superresolution-pic.jpg');"></div>
                         <h3>Deep generative super-resolution for enhanced biomedical imaging</h3>
@@ -1132,9 +1194,7 @@
                             <span class="tag">Multimodal imaging</span>
                         </div>
                     </div>
-                <!-- </a> -->
 
-                <!-- <a href="project-durablevalve.html" style="text-decoration: none; color: inherit;"> -->
                     <div class="card fade-in stagger-1 project-card">
                         <div class="project-image" style="background-image: url('aortaflow-pic.jpg');"></div>
                         <h3>Performance evaluation of polymeric aortic valves</h3>
@@ -1148,243 +1208,298 @@
                             <span class="tag">Leaflet motion analysis</span>
                         </div>
                     </div>
-                <!-- </a> -->
             </div>
         </div>
     </section>
 
     <section id="publications">
         <div class="container">
-            <h2>Publications & conferences</h2>
-            
-            <div style="margin-bottom: 4rem;">
-                <h3 style="font-family: 'IBM Plex Sans', sans-serif; font-size: 1.8rem; color: var(--secondary); margin-bottom: 2rem; font-weight: 500;">Peer-reviewed journal articles</h3>
-                <div class="timeline">
-                    <div class="timeline-item">
-                        <div class="year">2025</div>
-                        <p>Tagliavini G., Holzner M., <strong><u>Corso P.</u></strong> <a href="https://doi.org/10.1016/j.ijmultiphaseflow.2025.105365" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent); transition: color 0.3s;">"Modal analysis reveals imprint of snowflake shape on wake flow structures"</a> <em>International Journal of Multiphase Flow</em>, 193:105365</p>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="year">2025</div>
-                        <p>Mokhtari A., <strong><u>Corso P.</u></strong>, Jung B., et al. <a href="https://doi.org/10.1016/j.compbiomed.2025.110405" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent); transition: color 0.3s;">"Comparison of 4D flow MRI and computational fluid dynamics in carotid models with different stenosis levels"</a> <em>Computers in Biology and Medicine</em>, 194:110405</p>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="year">2024</div>
-                        <p><strong><u>Corso P.</u></strong>, Obrist D. <a href="https://doi.org/10.1016/j.compbiomed.2024.108552" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent); transition: color 0.3s;">"On the role of aortic valve architecture for physiological hemodynamics and valve replacement. Part II: spectral analysis and anisotropy"</a> <em>Computers in Biology and Medicine</em>, 176(11):108552</p>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="year">2024</div>
-                        <p><strong><u>Corso P.</u></strong>, Obrist D. <a href="https://doi.org/10.1016/j.compbiomed.2024.108526" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent); transition: color 0.3s;">"On the role of aortic valve architecture for physiological hemodynamics and valve replacement. Part I: flow configuration and vortex dynamics"</a> <em>Computers in Biology and Medicine</em>, 176(11):108526</p>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="year">2023</div>
-                        <p>Jahren S.E., Demirel C., Bornemann K.M., <strong><u>Corso P.</u></strong>, et al. <a href="https://doi.org/10.1063/5.0170583" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent); transition: color 0.3s;">"Altered blood flow due to larger aortic diameters in patients with transcatheter heart valve thrombosis"</a> <em>APL Bioengineering</em>, 7(4):046120</p>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="year">2023</div>
-                        <p>Tsolaki E., <strong><u>Corso P.</u> (co-first author)</strong>, Zboray R. et al. <a href="https://doi.org/10.1016/j.actbio.2023.07.044" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent); transition: color 0.3s;">"Multiscale Multimodal Investigation and Simulation of Structural Alterations in Failed Bioprosthetic Heart Valves"</a> <em>Acta Biomaterialia</em>, 169(1):138-154</p>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="year">2021</div>
-                        <p>Krol Q., Fouxon I., <strong><u>Corso P.</u></strong>, Holzner M. <a href="https://doi.org/10.1029/2021GL094694" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent); transition: color 0.3s;">"Local hydraulic resistance in heterogeneous porous media"</a> <em>Geophysical Research Letters</em>, 88(22):e2021GL094694</p>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="year">2021</div>
-                        <p>Tagliavini G., McCorquodale M., Westbrook Ch., <strong><u>Corso P.</u></strong>, Krol Q., Holzner M. <a href="https://doi.org/10.1016/j.ijmultiphaseflow.2021.103652" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent); transition: color 0.3s;">"Drag coefficient prediction of complex-shaped snow particles falling in air beyond the Stokes regime"</a> <em>International Journal of Multiphase Flow</em>, 140(1):103652</p>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="year">2021</div>
-                        <p><strong><u>Corso P.</u></strong>, Walheim J., Dillinger H., et al. <a href="https://doi.org/10.1002/mrm.28795" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent); transition: color 0.3s;">"Toward an accurate estimation of wall shear stress from 4D flow magnetic resonance downstream of a severe stenosis"</a> <em>Magnetic Resonance in Medicine</em>, 86(3):1531-1543</p>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="year">2021</div>
-                        <p><strong><u>Corso P.</u></strong>, Giannakopoulos G., Gülan U., Frouzakis E.Ch., Holzner M. <a href="https://doi.org/10.1109/TBME.2020.3018173" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent); transition: color 0.3s;">"A Novel Estimation Approach of Pressure Gradient and Haemodynamic Stresses as Indicators of Pathological Aortic Flow Using Subvoxel Modelling"</a> <em>IEEE Transactions on Biomedical Engineering</em>, 68(3):980-991</p>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="year">2019</div>
-                        <p>Gülan U., Appa H., <strong><u>Corso P.</u></strong>, et al. <a href="https://doi.org/10.1111/aor.13504" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent); transition: color 0.3s;">"Performance of the Transcatheter Aortic-Valve Implantation (TAVI) on Blood Flow Hemodynamics: An Optical Imaging-based In Vitro Study"</a> <em>Artificial Organs</em>, 43(10):282-293</p>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="year">2019</div>
-                        <p><strong><u>Corso P.</u></strong>, Gülan U., Cohrs N., et al. <a href="https://doi.org/10.1007/s10439-019-02289-y" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent); transition: color 0.3s;">"Comprehensive in vitro study of the flow past two transcatheter aortic valves: comparison with a severe stenotic case"</a> <em>Annals of Biomedical Engineering</em>, 47(9):2241-2257</p>
-                    </div>
-                </div>
+            <div class="section-header">
+                <h2>Publications &amp; conferences</h2>
+                <button class="toggle-btn" onclick="toggleSection(this)" aria-expanded="true" aria-label="Toggle section">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>
+                </button>
             </div>
 
-            <div style="margin-top: 4rem;">
-                <h3 style="font-family: 'IBM Plex Sans', sans-serif; font-size: 1.8rem; color: var(--secondary); margin-bottom: 2rem; font-weight: 500;">Recent conference presentations</h3>
-                <div class="research-grid">
-                    <a href="https://www.researchgate.net/publication/395349833_Deep_generative_super-resolution_for_enhanced_mouse_brain_imaging_and_optical_blood_flow_measurements" target="_blank" style="text-decoration: none; color: inherit;">
-                        <div class="card fade-in stagger-1 conference-card" style="background-image: url('conference-barcelona-2025.jpg'); background-size: cover; background-position: center;">
-                            <div class="conference-overlay">
-                                <h3>2025 | Barcelona, Spain</h3>
-                                <p><strong>20<sup>th</sup> International Symposium on Computer Methods in Biomechanics and Biomedical Engineering</strong></p>
-                                <p>"Deep generative super-resolution for enhanced mouse brain imaging and optical blood flow measurements"</p>
-                                <p style="margin-top: 1rem; color: var(--accent); font-weight: 600;">View on ResearchGate →</p>
-                            </div>
+            <div class="section-body">
+                <div style="margin-bottom: 4rem;">
+                    <h3 style="font-family: 'IBM Plex Sans', sans-serif; font-size: 1.8rem; color: var(--secondary); margin-bottom: 2rem; font-weight: 500;">Peer-reviewed journal articles</h3>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="year">2025</div>
+                            <p>Tagliavini G., Holzner M., <strong><u>Corso P.</u></strong> <a href="https://doi.org/10.1016/j.ijmultiphaseflow.2025.105365" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent); transition: color 0.3s;">"Modal analysis reveals imprint of snowflake shape on wake flow structures"</a> <em>International Journal of Multiphase Flow</em>, 193:105365</p>
                         </div>
-                    </a>
-                    <a href="https://www.researchgate.net/publication/395348029_Modal_analysis_reveals_aortic_valve_design_effects_on_blood_flow_patterns" target="_blank" style="text-decoration: none; color: inherit;">
-                        <div class="card fade-in stagger-1 conference-card" style="background-image: url('conference-dublin-2025.jpg'); background-size: cover; background-position: center;">
-                            <div class="conference-overlay">
-                                <h3>2025 | Dublin, Ireland</h3>
-                                <p><strong>2<sup>nd</sup> European Fluid Dynamics Conference</strong></p>
-                                <p>"Modal analysis reveals aortic valve design effects on blood flow patterns"</p>
-                                <p style="margin-top: 1rem; color: var(--accent); font-weight: 600;">View on ResearchGate →</p>
-                            </div>
+                        <div class="timeline-item">
+                            <div class="year">2025</div>
+                            <p>Mokhtari A., <strong><u>Corso P.</u></strong>, Jung B., et al. <a href="https://doi.org/10.1016/j.compbiomed.2025.110405" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent); transition: color 0.3s;">"Comparison of 4D flow MRI and computational fluid dynamics in carotid models with different stenosis levels"</a> <em>Computers in Biology and Medicine</em>, 194:110405</p>
                         </div>
-                    </a>
-                    <a href="https://www.researchgate.net/publication/393551439_Computational_analysis_of_wall_shear_stress_and_strain-based_metrics_as_calcification_indicators_in_tissue_and_polymeric_prosthetic_aortic_valves" target="_blank" style="text-decoration: none; color: inherit;">
-                        <div class="card fade-in stagger-2 conference-card" style="background-image: url('conference-zuerich-2025.jpg'); background-size: cover; background-position: center;">
-                            <div class="conference-overlay">
-                                <h3>2025 | Zurich, Switzerland</h3>
-                                <p><strong>30<sup>th</sup> Congress of the European Society of Biomechanics</strong></p>
-                                <p>"Computational analysis of wall shear stress and strain-based metrics as calcification indicators in tissue and polymeric prosthetic aortic valves"</p>
-                                <p style="margin-top: 1rem; color: var(--accent); font-weight: 600;">View on ResearchGate →</p>
-                            </div>
+                        <div class="timeline-item">
+                            <div class="year">2024</div>
+                            <p><strong><u>Corso P.</u></strong>, Obrist D. <a href="https://doi.org/10.1016/j.compbiomed.2024.108552" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent); transition: color 0.3s;">"On the role of aortic valve architecture for physiological hemodynamics and valve replacement. Part II: spectral analysis and anisotropy"</a> <em>Computers in Biology and Medicine</em>, 176(11):108552</p>
                         </div>
-                    </a>
-                    <a href="https://www.researchgate.net/publication/384194864_How_do_polymeric_aortic_valves_perform_A_computational_study_of_blood-structure_dynamics_under_various_material_and_geometrical_conditions" target="_blank" style="text-decoration: none; color: inherit;">
-                        <div class="card fade-in stagger-2 conference-card" style="background-image: url('conference-aachen-2024.jpg'); background-size: cover; background-position: center;">
-                            <div class="conference-overlay">
-                                <h3>2024 | Aachen, Germany</h3>
-                                <p><strong>1<sup>st</sup> European Fluid Dynamics Conference</strong></p>
-                                <p>"How do polymeric aortic valves perform? A computational study of blood-structure dynamics"</p>
-                                <p style="margin-top: 1rem; color: var(--accent); font-weight: 600;">View on ResearchGate →</p>
-                            </div>
+                        <div class="timeline-item">
+                            <div class="year">2024</div>
+                            <p><strong><u>Corso P.</u></strong>, Obrist D. <a href="https://doi.org/10.1016/j.compbiomed.2024.108526" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent); transition: color 0.3s;">"On the role of aortic valve architecture for physiological hemodynamics and valve replacement. Part I: flow configuration and vortex dynamics"</a> <em>Computers in Biology and Medicine</em>, 176(11):108526</p>
                         </div>
-                    </a>
-                    <a href="https://www.researchgate.net/publication/372338720_Numerical_prediction_of_calcific_regions_in_bioprosthetic_heart_valves_correlating_imaging_and_simulation_data" target="_blank" style="text-decoration: none; color: inherit;">
-                        <div class="card fade-in stagger-2 conference-card" style="background-image: url('conference-maastricht-2023.jpg'); background-size: cover; background-position: center;">
-                            <div class="conference-overlay">
-                                <h3>2023 | Maastricht, Netherlands</h3>
-                                <p><strong>28<sup>th</sup> Congress of the European Society of Biomechanics</strong></p>
-                                <p>"Numerical prediction of calcific regions in bioprosthetic heart valves"</p>
-                                <p style="margin-top: 1rem; color: var(--accent); font-weight: 600;">View on ResearchGate →</p>
-                            </div>
+                        <div class="timeline-item">
+                            <div class="year">2023</div>
+                            <p>Jahren S.E., Demirel C., Bornemann K.M., <strong><u>Corso P.</u></strong>, et al. <a href="https://doi.org/10.1063/5.0170583" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent); transition: color 0.3s;">"Altered blood flow due to larger aortic diameters in patients with transcatheter heart valve thrombosis"</a> <em>APL Bioengineering</em>, 7(4):046120</p>
                         </div>
-                    </a>
+                        <div class="timeline-item">
+                            <div class="year">2023</div>
+                            <p>Tsolaki E., <strong><u>Corso P.</u> (co-first author)</strong>, Zboray R. et al. <a href="https://doi.org/10.1016/j.actbio.2023.07.044" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent); transition: color 0.3s;">"Multiscale Multimodal Investigation and Simulation of Structural Alterations in Failed Bioprosthetic Heart Valves"</a> <em>Acta Biomaterialia</em>, 169(1):138-154</p>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="year">2021</div>
+                            <p>Krol Q., Fouxon I., <strong><u>Corso P.</u></strong>, Holzner M. <a href="https://doi.org/10.1029/2021GL094694" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent); transition: color 0.3s;">"Local hydraulic resistance in heterogeneous porous media"</a> <em>Geophysical Research Letters</em>, 88(22):e2021GL094694</p>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="year">2021</div>
+                            <p>Tagliavini G., McCorquodale M., Westbrook Ch., <strong><u>Corso P.</u></strong>, Krol Q., Holzner M. <a href="https://doi.org/10.1016/j.ijmultiphaseflow.2021.103652" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent); transition: color 0.3s;">"Drag coefficient prediction of complex-shaped snow particles falling in air beyond the Stokes regime"</a> <em>International Journal of Multiphase Flow</em>, 140(1):103652</p>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="year">2021</div>
+                            <p><strong><u>Corso P.</u></strong>, Walheim J., Dillinger H., et al. <a href="https://doi.org/10.1002/mrm.28795" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent); transition: color 0.3s;">"Toward an accurate estimation of wall shear stress from 4D flow magnetic resonance downstream of a severe stenosis"</a> <em>Magnetic Resonance in Medicine</em>, 86(3):1531-1543</p>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="year">2021</div>
+                            <p><strong><u>Corso P.</u></strong>, Giannakopoulos G., Gülan U., Frouzakis E.Ch., Holzner M. <a href="https://doi.org/10.1109/TBME.2020.3018173" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent); transition: color 0.3s;">"A Novel Estimation Approach of Pressure Gradient and Haemodynamic Stresses as Indicators of Pathological Aortic Flow Using Subvoxel Modelling"</a> <em>IEEE Transactions on Biomedical Engineering</em>, 68(3):980-991</p>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="year">2019</div>
+                            <p>Gülan U., Appa H., <strong><u>Corso P.</u></strong>, et al. <a href="https://doi.org/10.1111/aor.13504" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent); transition: color 0.3s;">"Performance of the Transcatheter Aortic-Valve Implantation (TAVI) on Blood Flow Hemodynamics: An Optical Imaging-based In Vitro Study"</a> <em>Artificial Organs</em>, 43(10):282-293</p>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="year">2019</div>
+                            <p><strong><u>Corso P.</u></strong>, Gülan U., Cohrs N., et al. <a href="https://doi.org/10.1007/s10439-019-02289-y" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent); transition: color 0.3s;">"Comprehensive in vitro study of the flow past two transcatheter aortic valves: comparison with a severe stenotic case"</a> <em>Annals of Biomedical Engineering</em>, 47(9):2241-2257</p>
+                        </div>
+                    </div>
                 </div>
-                <p style="margin-top: 2rem; text-align: center; color: var(--secondary); font-style: italic;">10+ international conference presentations spanning fluid mechanics, biomechanics and computer methods</p>
-            </div>
+
+                <div style="margin-top: 4rem;">
+                    <h3 style="font-family: 'IBM Plex Sans', sans-serif; font-size: 1.8rem; color: var(--secondary); margin-bottom: 2rem; font-weight: 500;">Recent conference presentations</h3>
+                    <div class="research-grid">
+                        <a href="https://www.researchgate.net/publication/395349833_Deep_generative_super-resolution_for_enhanced_mouse_brain_imaging_and_optical_blood_flow_measurements" target="_blank" style="text-decoration: none; color: inherit;">
+                            <div class="card fade-in stagger-1 conference-card" style="background-image: url('conference-barcelona-2025.jpg'); background-size: cover; background-position: center;">
+                                <div class="conference-overlay">
+                                    <h3>2025 | Barcelona, Spain</h3>
+                                    <p><strong>20<sup>th</sup> International Symposium on Computer Methods in Biomechanics and Biomedical Engineering</strong></p>
+                                    <p>"Deep generative super-resolution for enhanced mouse brain imaging and optical blood flow measurements"</p>
+                                    <p style="margin-top: 1rem; color: var(--accent); font-weight: 600;">View on ResearchGate →</p>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="https://www.researchgate.net/publication/395348029_Modal_analysis_reveals_aortic_valve_design_effects_on_blood_flow_patterns" target="_blank" style="text-decoration: none; color: inherit;">
+                            <div class="card fade-in stagger-1 conference-card" style="background-image: url('conference-dublin-2025.jpg'); background-size: cover; background-position: center;">
+                                <div class="conference-overlay">
+                                    <h3>2025 | Dublin, Ireland</h3>
+                                    <p><strong>2<sup>nd</sup> European Fluid Dynamics Conference</strong></p>
+                                    <p>"Modal analysis reveals aortic valve design effects on blood flow patterns"</p>
+                                    <p style="margin-top: 1rem; color: var(--accent); font-weight: 600;">View on ResearchGate →</p>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="https://www.researchgate.net/publication/393551439_Computational_analysis_of_wall_shear_stress_and_strain-based_metrics_as_calcification_indicators_in_tissue_and_polymeric_prosthetic_aortic_valves" target="_blank" style="text-decoration: none; color: inherit;">
+                            <div class="card fade-in stagger-2 conference-card" style="background-image: url('conference-zuerich-2025.jpg'); background-size: cover; background-position: center;">
+                                <div class="conference-overlay">
+                                    <h3>2025 | Zurich, Switzerland</h3>
+                                    <p><strong>30<sup>th</sup> Congress of the European Society of Biomechanics</strong></p>
+                                    <p>"Computational analysis of wall shear stress and strain-based metrics as calcification indicators in tissue and polymeric prosthetic aortic valves"</p>
+                                    <p style="margin-top: 1rem; color: var(--accent); font-weight: 600;">View on ResearchGate →</p>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="https://www.researchgate.net/publication/384194864_How_do_polymeric_aortic_valves_perform_A_computational_study_of_blood-structure_dynamics_under_various_material_and_geometrical_conditions" target="_blank" style="text-decoration: none; color: inherit;">
+                            <div class="card fade-in stagger-2 conference-card" style="background-image: url('conference-aachen-2024.jpg'); background-size: cover; background-position: center;">
+                                <div class="conference-overlay">
+                                    <h3>2024 | Aachen, Germany</h3>
+                                    <p><strong>1<sup>st</sup> European Fluid Dynamics Conference</strong></p>
+                                    <p>"How do polymeric aortic valves perform? A computational study of blood-structure dynamics"</p>
+                                    <p style="margin-top: 1rem; color: var(--accent); font-weight: 600;">View on ResearchGate →</p>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="https://www.researchgate.net/publication/372338720_Numerical_prediction_of_calcific_regions_in_bioprosthetic_heart_valves_correlating_imaging_and_simulation_data" target="_blank" style="text-decoration: none; color: inherit;">
+                            <div class="card fade-in stagger-2 conference-card" style="background-image: url('conference-maastricht-2023.jpg'); background-size: cover; background-position: center;">
+                                <div class="conference-overlay">
+                                    <h3>2023 | Maastricht, Netherlands</h3>
+                                    <p><strong>28<sup>th</sup> Congress of the European Society of Biomechanics</strong></p>
+                                    <p>"Numerical prediction of calcific regions in bioprosthetic heart valves"</p>
+                                    <p style="margin-top: 1rem; color: var(--accent); font-weight: 600;">View on ResearchGate →</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <p style="margin-top: 2rem; text-align: center; color: var(--secondary); font-style: italic;">10+ international conference presentations spanning fluid mechanics, biomechanics and computer methods</p>
+                </div>
+            </div><!-- end .section-body -->
         </div>
     </section>
 
     <section id="funding">
         <div class="container">
-            <h2>Project proposals submitted as Principal Investigator</h2>
-            
-            <div class="timeline" style="margin-top: 3rem;">
-                <div class="timeline-item">
-                    <div class="year">2025</div>
-                    <h3>FNRS Research Associate ("Chercheur Qualifié") Grant</h3>
-                    <div class="institution">Belgian National Fund for Scientific Research (F.R.S.-FNRS)</div>
-                    <p><strong>Status:</strong> <span class="highlight">Rated "A - Excellent"</span> | Not granted (5% success rate)</p>
-                    <p><strong>Submitted:</strong> January 2025 | Resubmission permitted</p>
-                    <p>Independent research position proposal for the iValve Platform combining multiphysics simulations with AI-driven optimisation of patient-specific polymeric aortic valves.</p>
-                    <p><strong>Host:</strong> Prof. B. Haut, Université libre de Bruxelles (ULB)</p>
-                    <p><strong>Collaborative support:</strong> ETH Zurich (Dr F. Coulter), Swiss Data Science Center (Dr E. Krymova), Politecnico di Torino (Prof. U. Morbiducci)</p>
-                </div>    
-                <div class="timeline-item">
-                    <div class="year">2024 - 2025</div>
-                    <h3>Swiss National Supercomputing Centre (CSCS) Grant</h3>
-                    <div class="institution"> 300,000 node-hours (equivalent to ~240,000 CHF) in hybrid CPU-GPU computing resources | Project ID s1284 | <i>Piz Daint</i> and <i>Daint.Alps</i> supercomputers </div>
-                    <p><strong>Status:</strong> <span class="highlight">Granted</span></p>
-                    <p>Geometrical and material parameter optimisation of 3D-printed silicone aortic valves from computational data.</p>
-                </div>     
-                <div class="timeline-item">
-                    <div class="year">2024</div>
-                    <h3>SNSF Ambizione Grant</h3>
-                    <div class="institution">Swiss National Science Foundation</div>
-                    <p><strong>Status:</strong> Not granted (15% success rate)</p>
-                    <p><strong>Submitted:</strong> November 2024</p>
-                    <p>Independent group leader position for MLAVOpt: data-driven platform for customised polymeric valve design and optimisation.</p>
-                    <p><strong>Host:</strong> Prof. F. Coletti, ETH Zurich</p>
-                    <p><strong>Collaborative support:</strong> ETH Zurich (Dr F. Coulter), Swiss Data Science Center (Dr E. Krymova), Politecnico di Torino (Prof. U. Morbiducci)</p>
-                </div>
-                <div class="timeline-item">
-                    <div class="year">2024</div>
-                    <h3>SNSF-BRIDGE Proof of Concept Grant</h3>
-                    <div class="institution">Swiss National Science Foundation | Innosuisse</div>
-                    <p><strong>Status:</strong> Not granted (16% success rate)</p>
-                    <p><strong>Submitted:</strong> August 2024</p>
-                    <p>Commercialisation pathway for 3D-printed elastomeric valve prosthesis using in vitro-in silico platform to translate calcification insights into improved durability.</p>
-                    <p><strong>Host:</strong> Prof. C. Menon, ETH Zurich</p>
-                    <p><strong>Collaborative support:</strong> Dr F. Coulter, ETH Zurich</p>
-                    <p><strong>Industry support:</strong> Hi-D Imaging AG (CEO letter)</p>
-                    <p><strong>Academic support:</strong> Ingenuity Lab Zurich (group head letter)</p>
-                </div>
-                <div class="timeline-item">
-                    <div class="year">2023 - 2024</div>
-                    <h3>Swiss National Supercomputing Centre (CSCS) Grant</h3>
-                    <div class="institution">308,000 node-hours (equivalent to ~245,000 CHF) in hybrid CPU-GPU computing resources | Project ID s1210 | <i>Piz Daint</i> supercomputer</div>
-                    <p><strong>Status:</strong> <span class="highlight">Granted</span></p>
-                    <p>3D-printed aortic valves in patient-specific aorta: computational performance study.</p>
-                </div>
-                <div class="timeline-item">
-                    <div class="year">2022 - 2023</div>
-                    <h3>Swiss National Supercomputing Centre (CSCS) Grant</h3>
-                    <div class="institution">62,500 node-hours (equivalent to ~50,000 CHF) in hybrid CPU-GPU computing resources | Project ID s1153 | <i>Piz Daint</i> supercomputer</div>
-                    <p><strong>Status:</strong> <span class="highlight">Granted</span></p>
-                    <p>Leaflet motion and flow characteristics of 3D-printed fibre-reinforced aortic valves.</p>
-                </div>
-            <p style="margin-top: 3rem; text-align: center; color: var(--text); font-style: italic;">Total funded computing resources: ~535,000 CHF equivalent | Multiple competitive proposals with excellent ratings</p>
+            <div class="section-header">
+                <h2>Project proposals submitted as Principal Investigator</h2>
+                <button class="toggle-btn" onclick="toggleSection(this)" aria-expanded="true" aria-label="Toggle section">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>
+                </button>
+            </div>
+
+            <div class="section-body">
+                <div class="timeline" style="margin-top: 0;">
+
+                    <!-- ══ NEW: Feb 2026 ══ -->
+                    <div class="timeline-item">
+                        <div class="year">Feb 2026</div>
+                        <h3>Innoviris "Brains for Brussels" Grant <span class="status-badge under-review">Under review</span></h3>
+                        <div class="institution">Innoviris – Brussels Institute for Research and Innovation</div>
+                        <p><strong>Proposal title:</strong> Automated Design and Personalised Tissue-engineered Aortic Valves.</p>
+                        <p><strong>Host:</strong> Prof. B. Haut, Université libre de Bruxelles (ULB)</p>
+                        <p><strong>Collaborative support:</strong> Dr F. Vanden Eynden (Hôpital Universitaire de Bruxelles, H.U.B.), Prof. J. Goole (ULB), Knowledge Transfer Office (KTO/ULB)</p>
+                    </div>
+
+                    <!-- ══ NEW: Jan 2026 ══ -->
+                    <div class="timeline-item">
+                        <div class="year">Jan 2026</div>
+                        <h3>F.R.S.-FNRS Research Associate ("Chercheur Qualifié") Grant – Resubmission <span class="status-badge under-review">Under review</span></h3>
+                        <div class="institution">Belgian National Fund for Scientific Research (F.R.S.-FNRS)</div>
+                        <p><strong>Submitted:</strong> January 2026 | Resubmission revised in response to evaluators' comments following the <a href="#fnrs2025">January 2025 submission</a> (rated "A – Excellent")</p>
+                        <p><strong>Proposal title:</strong> Integrated Multiphysics Simulations and Machine Learning for the Automated Optimisation of Patient-Specific Polymeric Aortic Valves across Haemodynamics, Durability and Mechanics.</p>
+                        <p><strong>Host:</strong> Prof. B. Haut, ULB</p>
+                        <p><strong>Collaborative support:</strong> Prof. C. Oury (Université de Liège), Prof. U. Morbiducci (Politecnico di Torino), Dr S. Celi (Fondazione Toscana G. Monasterio), Dr F. Vanden Eynden (H.U.B.)</p>
+                    </div>
+
+                    <!-- ══ NEW: Oct 2025 ══ -->
+                    <div class="timeline-item">
+                        <div class="year">Oct 2025</div>
+                        <h3>IRIS Fellowship (ULB/VUB – MSCA COFUND) <span class="status-badge under-review">Under review</span></h3>
+                        <div class="institution">Université libre de Bruxelles / Vrije Universiteit Brussel – Marie Skłodowska-Curie COFUND</div>
+                        <p><strong>Proposal title:</strong> Automated Design and Personalised Tissue-engineered Aortic Valves.</p>
+                        <p><strong>Host:</strong> Prof. B. Haut, ULB</p>
+                        <p><strong>Collaborative support:</strong> Dr F. Vanden Eynden (H.U.B.), Prof. J. Goole (ULB), Prof. U. Morbiducci (Politecnico di Torino), Dr S. Celi (Fondazione Toscana G. Monasterio)</p>
+                    </div>
+
+                    <!-- ══ EXISTING: Jan 2025 ══ -->
+                    <div class="timeline-item" id="fnrs2025">
+                        <div class="year">Jan 2025</div>
+                        <h3>F.R.S.-FNRS Research Associate ("Chercheur Qualifié") Grant <span class="status-badge excellent">Rated "A – Excellent"</span></h3>
+                        <div class="institution">Belgian National Fund for Scientific Research (F.R.S.-FNRS)</div>
+                        <p><strong>Status:</strong> Not granted (5% success rate) | Resubmission permitted and submitted (see <a href="#fnrs2026">January 2026</a>)</p>
+                        <p>Independent research position proposal for the iValve Platform combining multiphysics simulations with AI-driven optimisation of patient-specific polymeric aortic valves.</p>
+                        <p><strong>Host:</strong> Prof. B. Haut, Université libre de Bruxelles (ULB)</p>
+                        <p><strong>Collaborative support:</strong> ETH Zurich (Dr F. Coulter), Swiss Data Science Center (Dr E. Krymova), Politecnico di Torino (Prof. U. Morbiducci)</p>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="year">2024 – 2025</div>
+                        <h3>Swiss National Supercomputing Centre (CSCS) Grant <span class="status-badge granted">Granted</span></h3>
+                        <div class="institution">300,000 node-hours (equivalent to ~240,000 CHF) in hybrid CPU-GPU computing resources | Project ID s1284 | <i>Piz Daint</i> and <i>Daint.Alps</i> supercomputers</div>
+                        <p>Geometrical and material parameter optimisation of 3D-printed silicone aortic valves from computational data.</p>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="year">Nov 2024</div>
+                        <h3>SNSF Ambizione Grant</h3>
+                        <div class="institution">Swiss National Science Foundation</div>
+                        <p><strong>Status:</strong> Not granted (15% success rate)</p>
+                        <p>Independent group leader position for MLAVOpt: data-driven platform for customised polymeric valve design and optimisation.</p>
+                        <p><strong>Host:</strong> Prof. F. Coletti, ETH Zurich</p>
+                        <p><strong>Collaborative support:</strong> ETH Zurich (Dr F. Coulter), Swiss Data Science Center (Dr E. Krymova), Politecnico di Torino (Prof. U. Morbiducci)</p>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="year">Aug 2024</div>
+                        <h3>SNSF-BRIDGE Proof of Concept Grant</h3>
+                        <div class="institution">Swiss National Science Foundation | Innosuisse</div>
+                        <p><strong>Status:</strong> Not granted (16% success rate)</p>
+                        <p>Commercialisation pathway for 3D-printed elastomeric valve prosthesis using in vitro-in silico platform to translate calcification insights into improved durability.</p>
+                        <p><strong>Host:</strong> Prof. C. Menon, ETH Zurich</p>
+                        <p><strong>Collaborative support:</strong> Dr F. Coulter, ETH Zurich</p>
+                        <p><strong>Industry support:</strong> Hi-D Imaging AG (CEO letter)</p>
+                        <p><strong>Academic support:</strong> Ingenuity Lab Zurich (group head letter)</p>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="year">2023 – 2024</div>
+                        <h3>Swiss National Supercomputing Centre (CSCS) Grant <span class="status-badge granted">Granted</span></h3>
+                        <div class="institution">308,000 node-hours (equivalent to ~245,000 CHF) in hybrid CPU-GPU computing resources | Project ID s1210 | <i>Piz Daint</i> supercomputer</div>
+                        <p>3D-printed aortic valves in patient-specific aorta: computational performance study.</p>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="year">2022 – 2023</div>
+                        <h3>Swiss National Supercomputing Centre (CSCS) Grant <span class="status-badge granted">Granted</span></h3>
+                        <div class="institution">62,500 node-hours (equivalent to ~50,000 CHF) in hybrid CPU-GPU computing resources | Project ID s1153 | <i>Piz Daint</i> supercomputer</div>
+                        <p>Leaflet motion and flow characteristics of 3D-printed fibre-reinforced aortic valves.</p>
+                    </div>
+
+                </div><!-- end .timeline -->
+                <p style="margin-top: 3rem; text-align: center; color: var(--text); font-style: italic;">Total funded computing resources: ~535,000 CHF equivalent | Multiple competitive proposals with excellent ratings</p>
+            </div><!-- end .section-body -->
         </div>
     </section>
 
     <section id="education">
         <div class="container">
-            <h2>Experience & training</h2>
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="year">2025 - 2026</div>
-                    <h3>CAS in Entrepreneurial Leadership in Technology Ventures</h3>
-                    <div class="institution">ETH Zurich, Switzerland</div>
-                    <p>Advanced studies in technology entrepreneurship, venture creation, business and leadership development, entrepreneurial teams, marketing, finance and personal branding for deep-tech startups.</p>
-                </div>
-                <div class="timeline-item">
-                    <div class="year">2024 - 2025</div>
-                    <h3>Scientific Collaborator</h3>
-                    <div class="institution">ETH Zurich, Swiss Data Science Center (SDSC), Switzerland</div>
-                    <p>Developed deep generative models for spatial resolution enhancement in biomedical imaging. Collaboration with two biology laboratories at École Polytechnique Fédérale de Lausanne (EPFL) on mouse brain lipid distribution analysis using mass spectrometry data.</p>
-                </div>
-                <div class="timeline-item">
-                    <div class="year">2020 - 2024</div>
-                    <h3>Postdoctoral Researcher</h3>
-                    <div class="institution">University of Bern, ARTORG Center for Biomedical Engineering Research, Switzerland</div>
-                    <p>Head of computational haemodynamics sub-group (2021-2023), mentoring 5 postgraduate students. Developed high-fidelity fluid-structure interaction simulations for bioprosthetic valves as digital twins of cardiovascular physics. Research focused on correlating haemodynamic and biomechanical indicators with calcification propensity, characterising transition-to-turbulence downstream of prosthetic valves through spectral and modal analysis and investigating vorticity transport mechanisms. Coordinated collaborative research with ETH Zurich, Swiss Federal Laboratories for Materials Science and Technology and Università della Svizzera italiana.</p>
-                </div>
-                <div class="timeline-item">
-                    <div class="year">2015 - 2020</div>
-                    <h3>Scientific Assistant & Doctoral Candidate</h3>
-                    <div class="institution">ETH Zurich, Institute of Environmental Engineering, Switzerland</div>
-                    <p><strong>Degree:</strong> Doctor of Sciences (Dr sc. ETH Zurich) in Biomedical Flows and Engineering</p>
-                    <p><strong>Dissertation:</strong></p> <a href="https://www.research-collection.ethz.ch/entities/publication/35ef5d09-e867-40d8-8f7b-41d0c9e19dff" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent);">Computational and experimental investigation of disturbed aortic flows - novel methods to assess flow abnormalities due to severe stenoses and prosthetic aortic valves</a>
-                    <p><strong>Examiners:</strong> Prof. R. Stocker (ETH Zurich), Dr M. Holzner (ETH Zurich/Eawag/WSL), Dr Ch. E. Frouzakis (ETH Zurich), Prof. U. Morbiducci (Politecnico di Torino)</p>
-                    <p><strong>Research:</strong> Turbulent transitions downstream of stenotic and transcatheter aortic valves. Combined high-resolution computational fluid dynamics (DNS, LES) with experimental techniques (3D-PTV at 2000 fps, 4D Flow MRI, pulse duplicator systems).</p>
-                </div>
-                <div class="timeline-item">
-                    <div class="year">2014</div>
-                    <h3>Scientific Assistant</h3>
-                    <div class="institution"> University of Mons, Faculty of Engineering, Belgium</div>
-                    <p><strong>Salary award:</strong> Research position funded by the Halleux-Mirland endowment, awarded to outstanding engineering Master's graduates</p>
-                    <p><strong>Project:</strong> Computational and experimental study of flow-diverter stent filtration in aortic arch applications. Applied intracranial aneurysm methods to aortic flows using Particle Image Velocimetry (PIV) measurements and CFD simulations.</p>
-                </div>
-                <div class="timeline-item">
-                    <div class="year">2011 - 2013</div>
-                    <h3>Master of Science in Mechanical Engineering</h3>
-                    <div class="institution">University of Mons, Faculty of Engineering, Belgium</div>
-                    <p><strong>Degree (magna cum laude):</strong> Master of Science in Mechanical Engineering, specialisation in energy production systems</p>
-                    <p><strong>Thesis:</strong> Intracranial aneurysm haemodynamics with flow-diverter stents using PIV measurements and COMSOL Multiphysics simulations.</p>
-                    <p><strong>Final year project:</strong> Design and study of the mechanical and hydraulic parts of a musical fountain, awarded the <span class="highlight">Caterpillar Inc. prize for creativity</span>.</p>
-                </div>
+            <div class="section-header">
+                <h2>Experience &amp; training</h2>
+                <button class="toggle-btn" onclick="toggleSection(this)" aria-expanded="true" aria-label="Toggle section">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>
+                </button>
             </div>
+
+            <div class="section-body">
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="year">2025 – 2026</div>
+                        <h3>CAS in Entrepreneurial Leadership in Technology Ventures</h3>
+                        <div class="institution">ETH Zurich, Switzerland</div>
+                        <p>Advanced studies in technology entrepreneurship, venture creation, business and leadership development, entrepreneurial teams, marketing, finance and personal branding for deep-tech startups.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="year">2024 – 2025</div>
+                        <h3>Scientific Collaborator</h3>
+                        <div class="institution">ETH Zurich, Swiss Data Science Center (SDSC), Switzerland</div>
+                        <p>Developed deep generative models for spatial resolution enhancement in biomedical imaging. Collaboration with two biology laboratories at École Polytechnique Fédérale de Lausanne (EPFL) on mouse brain lipid distribution analysis using mass spectrometry data.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="year">2020 – 2024</div>
+                        <h3>Postdoctoral Researcher</h3>
+                        <div class="institution">University of Bern, ARTORG Center for Biomedical Engineering Research, Switzerland</div>
+                        <p>Head of computational haemodynamics sub-group (2021-2023), mentoring 5 postgraduate students. Developed high-fidelity fluid-structure interaction simulations for bioprosthetic valves as digital twins of cardiovascular physics. Research focused on correlating haemodynamic and biomechanical indicators with calcification propensity, characterising transition-to-turbulence downstream of prosthetic valves through spectral and modal analysis and investigating vorticity transport mechanisms. Coordinated collaborative research with ETH Zurich, Swiss Federal Laboratories for Materials Science and Technology and Università della Svizzera italiana.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="year">2015 – 2020</div>
+                        <h3>Scientific Assistant &amp; Doctoral Candidate</h3>
+                        <div class="institution">ETH Zurich, Institute of Environmental Engineering, Switzerland</div>
+                        <p><strong>Degree:</strong> Doctor of Sciences (Dr sc. ETH Zurich) in Biomedical Flows and Engineering</p>
+                        <p><strong>Dissertation:</strong></p> <a href="https://www.research-collection.ethz.ch/entities/publication/35ef5d09-e867-40d8-8f7b-41d0c9e19dff" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent);">Computational and experimental investigation of disturbed aortic flows - novel methods to assess flow abnormalities due to severe stenoses and prosthetic aortic valves</a>
+                        <p><strong>Examiners:</strong> Prof. R. Stocker (ETH Zurich), Dr M. Holzner (ETH Zurich/Eawag/WSL), Dr Ch. E. Frouzakis (ETH Zurich), Prof. U. Morbiducci (Politecnico di Torino)</p>
+                        <p><strong>Research:</strong> Turbulent transitions downstream of stenotic and transcatheter aortic valves. Combined high-resolution computational fluid dynamics (DNS, LES) with experimental techniques (3D-PTV at 2000 fps, 4D Flow MRI, pulse duplicator systems).</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="year">2014</div>
+                        <h3>Scientific Assistant</h3>
+                        <div class="institution">University of Mons, Faculty of Engineering, Belgium</div>
+                        <p><strong>Salary award:</strong> Research position funded by the Halleux-Mirland endowment, awarded to outstanding engineering Master's graduates</p>
+                        <p><strong>Project:</strong> Computational and experimental study of flow-diverter stent filtration in aortic arch applications. Applied intracranial aneurysm methods to aortic flows using Particle Image Velocimetry (PIV) measurements and CFD simulations.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="year">2011 – 2013</div>
+                        <h3>Master of Science in Mechanical Engineering</h3>
+                        <div class="institution">University of Mons, Faculty of Engineering, Belgium</div>
+                        <p><strong>Degree (magna cum laude):</strong> Master of Science in Mechanical Engineering, specialisation in energy production systems</p>
+                        <p><strong>Thesis:</strong> Intracranial aneurysm haemodynamics with flow-diverter stents using PIV measurements and COMSOL Multiphysics simulations.</p>
+                        <p><strong>Final year project:</strong> Design and study of the mechanical and hydraulic parts of a musical fountain, awarded the <span class="highlight">Caterpillar Inc. prize for creativity</span>.</p>
+                    </div>
+                </div>
+            </div><!-- end .section-body -->
         </div>
     </section>
 
     <section id="skills">
         <div class="container">
-            <h2>Skills & interests</h2>
+            <h2>Skills &amp; interests</h2>
             <div class="skills-container">
                 <div class="skill-category fade-in stagger-1">
                     <h3>Computational methods</h3>
@@ -1399,7 +1514,7 @@
                     </ul>
                 </div>
                 <div class="skill-category fade-in stagger-2">
-                    <h3>Machine learning & AI</h3>
+                    <h3>Machine learning &amp; AI</h3>
                     <ul>
                         <li>Variational Autoencoders (VAE)</li>
                         <li>Latent diffusion models</li>
@@ -1419,7 +1534,7 @@
                     </ul>
                 </div>
                 <div class="skill-category fade-in stagger-4">
-                    <h3>Software & languages</h3>
+                    <h3>Software &amp; languages</h3>
                     <ul>
                         <li>Programming: Python, MATLAB, C++, FORTRAN</li>
                         <li>CFD: <a href="https://nek5000.mcs.anl.gov/" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent);">NEK5000</a>, <a href="https://www.openfoam.com/" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent);">OpenFOAM</a></li>
@@ -1440,7 +1555,8 @@
                     <div class="contact-icon">🎓</div>
                     <h3>Academic profiles</h3>
                     <p><a href="https://scholar.google.com/citations?user=stRLORMAAAAJ&hl=en" target="_blank">Google Scholar</a></p>
-                    <p><a href="https://www.researchgate.net/profile/Pascal-Corso-2?ev=hdr_xprf" target="_blank">ResearchGate</a></p><p><a href="https://orcid.org/0000-0001-7875-1080" target="_blank">ORCID</a></p>
+                    <p><a href="https://www.researchgate.net/profile/Pascal-Corso-2?ev=hdr_xprf" target="_blank">ResearchGate</a></p>
+                    <p><a href="https://orcid.org/0000-0001-7875-1080" target="_blank">ORCID</a></p>
                 </div>
                 <div class="contact-card fade-in stagger-2">
                     <div class="contact-icon">💼</div>
@@ -1460,7 +1576,7 @@
             </div>
             <div style="margin-top: 3rem; text-align: center; font-size: 1.05rem; line-height: 1.8;">
                 <p><strong>Current Location:</strong> Switzerland (Zurich)</p>
-                <p><strong>Nationality:</strong> Belgian & Italian</p>
+                <p><strong>Nationality:</strong> Belgian &amp; Italian</p>
                 <p><strong>Open to:</strong> Research collaborations, consulting, speaking engagements</p>
             </div>
         </div>
@@ -1476,7 +1592,8 @@
         </div>
     </footer>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+    <script>
         // Smooth scrolling for navigation
         document.querySelectorAll('nav a').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
@@ -1507,7 +1624,7 @@
         });
 
         // Add hover effect to cards
-           document.querySelectorAll('.card').forEach(card => {
+        document.querySelectorAll('.card').forEach(card => {
             card.addEventListener('mouseenter', function() {
                 this.style.transform = 'translateY(-8px) scale(1.02)';
             });
@@ -1524,8 +1641,6 @@
 
         function updateCarousel() {
             track.style.transform = `translateX(-${currentSlide * 100}%)`;
-            
-            // Update indicators
             indicators.forEach((indicator, index) => {
                 indicator.classList.toggle('active', index === currentSlide);
             });
@@ -1533,14 +1648,11 @@
 
         function moveSlide(direction) {
             currentSlide += direction;
-            
-            // Loop around
             if (currentSlide < 0) {
                 currentSlide = slides.length - 1;
             } else if (currentSlide >= slides.length) {
                 currentSlide = 0;
             }
-            
             updateCarousel();
         }
 
@@ -1551,6 +1663,15 @@
 
         // Initialize carousel
         updateCarousel();
+
+        // ── Section toggle ──
+        function toggleSection(btn) {
+            const body = btn.closest('section').querySelector('.section-body');
+            const willCollapse = !body.classList.contains('collapsed');
+            body.classList.toggle('collapsed', willCollapse);
+            btn.classList.toggle('collapsed', willCollapse);
+            btn.setAttribute('aria-expanded', String(!willCollapse));
+        }
     </script>
 </body>
 </html>
