@@ -36,6 +36,7 @@
     
     <style>
         :root {
+            color-scheme: light;
             --primary: #1a4d6d;
             --secondary: #2d6a8e;
             --accent: #E6B800;
@@ -48,6 +49,42 @@
             --shadow-sm: 0 1px 2px rgba(16, 42, 67, 0.05), 0 4px 14px rgba(16, 42, 67, 0.05);
             --shadow-md: 0 2px 6px rgba(16, 42, 67, 0.06), 0 10px 30px rgba(16, 42, 67, 0.08);
             --shadow-lg: 0 4px 12px rgba(16, 42, 67, 0.08), 0 20px 48px rgba(16, 42, 67, 0.10);
+            /* Semantic surface tokens (so light/dark can be swapped in one place) */
+            --page-bg-1: #f5f7fa;
+            --page-bg-2: #e8eef3;
+            --surface: #ffffff;
+            --card-bg: #ffffff;
+            --nav-bg: rgba(255, 255, 255, 0.95);
+            --nav-shadow: rgba(0, 0, 0, 0.05);
+            --overlay-bg: rgba(255, 255, 255, 0.80);
+            --overlay-bg-hover: rgba(255, 255, 255, 0.88);
+            --dot-ring: #ffffff;
+            /* The hero banner stays navy in both themes */
+            --hero-1: #1a4d6d;
+            --hero-2: #2d6a8e;
+        }
+
+        [data-theme="dark"] {
+            color-scheme: dark;
+            --primary: #7fb3d5;
+            --secondary: #9ab6c9;
+            --accent: #E6B800;
+            --accent-deep: #d8b23e;
+            --light: #1e3444;
+            --text: #c8d3db;
+            --border: rgba(159, 189, 209, 0.18);
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35), 0 4px 14px rgba(0, 0, 0, 0.30);
+            --shadow-md: 0 2px 6px rgba(0, 0, 0, 0.40), 0 10px 30px rgba(0, 0, 0, 0.35);
+            --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.45), 0 20px 48px rgba(0, 0, 0, 0.40);
+            --page-bg-1: #0e1b26;
+            --page-bg-2: #0a141c;
+            --surface: #10212d;
+            --card-bg: #17293a;
+            --nav-bg: rgba(12, 22, 31, 0.90);
+            --nav-shadow: rgba(0, 0, 0, 0.40);
+            --overlay-bg: rgba(14, 26, 36, 0.78);
+            --overlay-bg-hover: rgba(14, 26, 36, 0.86);
+            --dot-ring: #10212d;
         }
 
         * {
@@ -59,12 +96,19 @@
         body {
             font-family: 'IBM Plex Sans', sans-serif;
             color: var(--text);
-            background: linear-gradient(135deg, #f5f7fa 0%, #e8eef3 100%);
+            background: linear-gradient(135deg, var(--page-bg-1) 0%, var(--page-bg-2) 100%);
             line-height: 1.7;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             text-rendering: optimizeLegibility;
+        }
+
+        /* Smooth recolour when the theme changes (elements without an existing
+           transition, so hover/lift transitions are left untouched) */
+        body, nav, section, .skill-category, footer,
+        .news-item, .timeline-item, .tag, .status-badge {
+            transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease;
         }
 
         ::selection {
@@ -102,7 +146,7 @@
         }
 
         .header-left {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            background: linear-gradient(135deg, var(--hero-1) 0%, var(--hero-2) 100%);
             padding: 4rem 3rem;
             display: flex;
             flex-direction: column;
@@ -346,10 +390,10 @@
         nav {
             position: sticky;
             top: 0;
-            background: rgba(255, 255, 255, 0.95);
+            background: var(--nav-bg);
             backdrop-filter: blur(10px);
             padding: 1.5rem 2rem;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 20px var(--nav-shadow);
             z-index: 1000;
             animation: slideDown 0.5s ease-out;
         }
@@ -408,7 +452,7 @@
         }
 
         section:nth-child(even) {
-            background: white;
+            background: var(--surface);
         }
 
         h2 {
@@ -484,8 +528,10 @@
             transition: max-height 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
             max-height: 20000px;
             opacity: 1;
-            /* Pull the clipping boundary leftward so absolutely-positioned
-               timeline dots (left: -3.5rem) are not sliced off */
+            /* Pull the clipping boundary outward (left and top) so the
+               absolutely-positioned timeline dots (left: -3.5rem; top: 0)
+               are not sliced off. The negative margin and the padding
+               cancel, so the layout is unchanged. */
             margin-left: -1rem;
             padding-left: 1rem;
             margin-top: -0.75rem;
@@ -506,12 +552,12 @@
         }
 
         .card {
-            background: white;
+            background: var(--card-bg);
             padding: 2.5rem;
             border-radius: 12px;
             box-shadow: var(--shadow-sm);
             border-left: 3px solid var(--accent);
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease;
             position: relative;
             overflow: hidden;
         }
@@ -562,7 +608,7 @@
         .conference-overlay {
             position: relative;
             z-index: 2;
-            background: rgba(255, 255, 255, 0.80);
+            background: var(--overlay-bg);
             padding: 2rem;
             border-radius: 8px;
             backdrop-filter: blur(5px);
@@ -571,7 +617,7 @@
         }
 
         .conference-card:hover .conference-overlay {
-            background: rgba(255, 255, 255, 0.88);
+            background: var(--overlay-bg-hover);
         }
 
         .conference-overlay h3 {
@@ -663,7 +709,7 @@
             height: 14px;
             border-radius: 50%;
             background: var(--accent);
-            border: 3px solid white;
+            border: 3px solid var(--dot-ring);
             box-shadow: 0 0 0 2px var(--accent);
         }
 
@@ -736,10 +782,10 @@
         }
 
         .skill-category {
-            background: white;
+            background: var(--card-bg);
             padding: 2rem;
             border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            box-shadow: var(--shadow-sm);
         }
 
         .skill-category h3 {
@@ -771,12 +817,12 @@
         }
 
         .contact-card {
-            background: white;
+            background: var(--card-bg);
             padding: 2rem;
             border-radius: 12px;
             text-align: center;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-            transition: transform 0.3s;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.3s, background-color 0.35s ease, color 0.35s ease;
         }
 
         .contact-card:hover {
@@ -932,7 +978,7 @@
             margin-bottom: 0.4rem;
         }
 
-        .news-tag.seminar    { background: #e8f0f5; color: var(--primary); }
+        .news-tag.seminar    { background: #e8f0f5; color: #1a4d6d; }
         .news-tag.grant      { background: #fdf6e3; color: #7a5800; }
         .news-tag.fellowship { background: #edf5ee; color: #2d6a3f; }
         .news-tag.preprint   { background: #f0eaf5; color: #5a3272; }
@@ -966,6 +1012,51 @@
                 border-top: 3px solid var(--border);
                 padding-left: 0;
                 padding-top: 2rem;
+            }
+        }
+
+        /* ── Theme toggle ── */
+        .theme-toggle {
+            position: fixed;
+            top: 1.25rem;
+            right: 1.25rem;
+            z-index: 1100;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--nav-bg);
+            border: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-sm);
+            color: var(--primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease, color 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.06);
+            border-color: var(--accent);
+        }
+
+        .theme-toggle svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        .theme-toggle .icon-sun { display: none; }
+        [data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+        [data-theme="dark"] .theme-toggle .icon-sun { display: block; }
+
+        @media (max-width: 768px) {
+            .theme-toggle {
+                top: 1rem;
+                right: 1rem;
+                width: 40px;
+                height: 40px;
             }
         }
 
@@ -1024,6 +1115,23 @@
       ]
     }
     </script>
+
+    <!-- Set the colour theme before first paint (stored choice, else system preference) -->
+    <script>
+    (function() {
+        var root = document.documentElement;
+        try {
+            var stored = localStorage.getItem('theme');
+            if (stored === 'dark' || stored === 'light') { root.setAttribute('data-theme', stored); return; }
+        } catch (e) {}
+        try {
+            var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            root.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+        } catch (e) {
+            root.setAttribute('data-theme', 'light');
+        }
+    })();
+    </script>
 </head>
 <body>
     <!-- Google Tag Manager (noscript) -->
@@ -1032,6 +1140,16 @@
     <!-- End Google Tag Manager (noscript) -->
     
     <div class="grain"></div>
+
+    <!-- Light / dark theme toggle -->
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Switch to dark mode" aria-pressed="false" title="Toggle light / dark mode">
+        <svg class="icon-moon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M21.64 13a1 1 0 0 0-1.05-.14 8.05 8.05 0 0 1-3.37.73 8.15 8.15 0 0 1-8.14-8.1 8.59 8.59 0 0 1 .25-2A1 1 0 0 0 8 2.36a10.14 10.14 0 1 0 14 11.69 1 1 0 0 0-.36-1.05z"/>
+        </svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0-13a1 1 0 0 0 1-1V1a1 1 0 0 0-2 0v2a1 1 0 0 0 1 1zm0 16a1 1 0 0 0-1 1v2a1 1 0 0 0 2 0v-2a1 1 0 0 0-1-1zM4.22 5.64a1 1 0 0 0 1.42-1.42l-1.42-1.4a1 1 0 0 0-1.4 1.4zm14.14 12.72a1 1 0 0 0-1.42 1.42l1.42 1.4a1 1 0 0 0 1.4-1.4zM4 12a1 1 0 0 0-1-1H1a1 1 0 0 0 0 2h2a1 1 0 0 0 1-1zm19-1h-2a1 1 0 0 0 0 2h2a1 1 0 0 0 0-2zM4.22 18.36l-1.4 1.42a1 1 0 0 0 1.4 1.4l1.42-1.4a1 1 0 0 0-1.42-1.42zM18.36 5.64a1 1 0 0 0 .7-.3l1.42-1.4a1 1 0 0 0-1.4-1.4l-1.42 1.4a1 1 0 0 0 .7 1.7z"/>
+        </svg>
+    </button>
 
     <header>
         <div class="header-content">
@@ -1735,6 +1853,27 @@
             btn.classList.toggle('collapsed', willCollapse);
             btn.setAttribute('aria-expanded', String(!willCollapse));
         }
+
+        // ── Light / dark theme toggle ──
+        function applyThemeState(theme) {
+            var btn = document.querySelector('.theme-toggle');
+            if (!btn) return;
+            var goingDark = theme === 'dark';
+            btn.setAttribute('aria-label', goingDark ? 'Switch to light mode' : 'Switch to dark mode');
+            btn.setAttribute('aria-pressed', goingDark ? 'true' : 'false');
+            btn.setAttribute('title', goingDark ? 'Switch to light mode' : 'Switch to dark mode');
+        }
+
+        function toggleTheme() {
+            var root = document.documentElement;
+            var next = (root.getAttribute('data-theme') === 'dark') ? 'light' : 'dark';
+            root.setAttribute('data-theme', next);
+            applyThemeState(next);
+            try { localStorage.setItem('theme', next); } catch (e) {}
+        }
+
+        // Sync the button label with whatever theme the head script chose
+        applyThemeState(document.documentElement.getAttribute('data-theme') || 'light');
     </script>
 </body>
 </html>
