@@ -747,6 +747,41 @@
             border-bottom-color: var(--primary);
         }
 
+        /* Nested sub-proposals within a combined timeline entry */
+        .timeline-item ul.subproposals {
+            margin: 0.25rem 0 1rem;
+            padding-left: 0;
+            list-style: none;
+        }
+        .timeline-item ul.subproposals li {
+            position: relative;
+            padding-left: 1.15rem;
+            margin-bottom: 0.75rem;
+            line-height: 1.6;
+        }
+        .timeline-item ul.subproposals li:last-child {
+            margin-bottom: 0;
+        }
+        .timeline-item ul.subproposals li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.62em;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--accent);
+        }
+        /* Editorial micro-label for inline sub-fields (Proposal title, Collaborative support) */
+        .timeline-item .meta-label {
+            font-size: 0.74rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            color: var(--secondary);
+            margin-right: 0.1rem;
+        }
+
         /* Status badge for proposals */
         .status-badge {
             display: inline-block;
@@ -1308,16 +1343,6 @@
                     <p><strong>Collaborative support:</strong> Dr F. Vanden Eynden, Hôpital Universitaire de Bruxelles (H.U.B.), Prof. J. Goole (ULB), Knowledge Transfer Office (KTO/ULB).</p>
                 </div>
 
-                <div class="news-item">
-                    <div class="news-date">Jan 2026 - Under review</div>
-                    <span class="news-tag grant">Grant</span>
-                    <p><strong>F.R.S.-FNRS Research Associate ("Chercheur Qualifié")</strong></p>
-                    <p><strong>Proposal title:</strong> Integrated Multiphysics Simulations and Machine Learning for the Automated Optimisation of Patient-Specific Polymeric Aortic Valves across Haemodynamics, Durability and Mechanics.</p>
-                    <p><strong>Role:</strong> Principal Investigator.</p>
-                    <p><strong>Host:</strong> Prof. B. Haut, ULB.</p>
-                    <p><strong>Collaborative support:</strong> Prof. C. Oury (Université de Liège), Prof. U. Morbiducci (Politecnico di Torino), Dr S. Celi (Fondazione Toscana G. Monasterio), Dr F. Vanden Eynden (H.U.B.).</p>
-                </div>
-
                 <!--<div class="news-item">
                     <div class="news-date">Oct 2025 - Under review</div>
                     <span class="news-tag fellowship">Fellowship</span>
@@ -1526,15 +1551,17 @@
                         <p><strong>Collaborative support:</strong> Dr F. Vanden Eynden (Hôpital Universitaire de Bruxelles, H.U.B.), Prof. J. Goole (ULB), Knowledge Transfer Office (KTO/ULB)</p>
                     </div>
 
-                    <!-- ══ NEW: Jan 2026 ══ -->
-                    <div class="timeline-item" id="fnrs2026">
-                        <div class="year">Jan 2026</div>
-                        <h3>F.R.S.-FNRS Research Associate ("Chercheur Qualifié") Grant <span class="status-badge under-review">Under review</span></h3>
+                    <!-- ══ FNRS CQ: combined Jan 2025 & Jan 2026 submissions ══ -->
+                    <div class="timeline-item" id="fnrs-cq">
+                        <div class="year">Jan 2026 / Jan 2025</div>
+                        <h3>F.R.S.-FNRS Research Associate ("Chercheur Qualifié") Grant <span class="status-badge excellent">Rated "A - Excellent"</span></h3>
                         <div class="institution">Belgian National Fund for Scientific Research (F.R.S.-FNRS)</div>
-                        <p><strong>Submitted:</strong> January 2026 | Resubmission revised in response to evaluators' comments following the <a href="#fnrs2025">January 2025 submission</a> (rated "A - Excellent")</p>
-                        <p><strong>Proposal title:</strong> Integrated Multiphysics Simulations and Machine Learning for the Automated Optimisation of Patient-Specific Polymeric Aortic Valves across Haemodynamics, Durability and Mechanics.</p>
-                        <p><strong>Host:</strong> Prof. B. Haut, ULB</p>
-                        <p><strong>Collaborative support:</strong> Prof. C. Oury (Université de Liège), Prof. U. Morbiducci (Politecnico di Torino), Dr S. Celi (Fondazione Toscana G. Monasterio), Dr F. Vanden Eynden (H.U.B.)</p>
+                        <p><span class="highlight">Independent research position</span> proposal combining <strong>multiphysics simulations with data-driven optimisation of patient-specific polymeric aortic valves</strong>. Submitted twice, each time awarded the <span class="highlight">top grade "A - Excellent" </span> yet unfunded owing to the exceptionally low success rate.</p>
+                        <ul class="subproposals">
+                            <li><strong>January 2026 (resubmission):</strong> revised in light of the evaluators' feedback on the first submission. <span class="meta-label">Proposal title:</span> <em>Integrated Multiphysics Simulations and Machine Learning for the Automated Optimisation of Patient-Specific Polymeric Aortic Valves across Haemodynamics, Durability and Mechanics</em>. Third and final submission permitted. <span class="meta-label">Collaborative support:</span> Prof. C. Oury (Université de Liège), Prof. U. Morbiducci (Politecnico di Torino), Dr S. Celi (Fondazione Toscana G. Monasterio), Dr F. Vanden Eynden (H.U.B.).</li>
+                            <li><strong>January 2025 (first submission):</strong> iValve Platform for AI-driven optimisation of patient-specific polymeric aortic valves. Resubmitted in Jan 2026. <span class="meta-label">Collaborative support:</span> Dr F. Coulter (ETH Zurich), Dr E. Krymova (Swiss Data Science Center), Prof. U. Morbiducci (Politecnico di Torino).</li>
+                        </ul>
+                        <p><strong>Host:</strong> Prof. B. Haut, Université libre de Bruxelles (ULB)</p>
                     </div>
 
                     <!-- ══ NEW: Oct 2025 ══ -->
@@ -1556,17 +1583,6 @@
                         <p><strong>Collaborative support:</strong> Dr F. Vanden Eynden (H.U.B.), Prof. J. Goole 
                         (ULB), Prof. U. Morbiducci (Politecnico di Torino), Dr S. Celi (Fondazione Toscana 
                         G. Monasterio)</p>
-                    </div>
-
-                    <!-- ══ EXISTING: Jan 2025 ══ -->
-                    <div class="timeline-item" id="fnrs2025">
-                        <div class="year">Jan 2025</div>
-                        <h3>F.R.S.-FNRS Research Associate ("Chercheur Qualifié") Grant <span class="status-badge excellent">Rated "A – Excellent"</span></h3>
-                        <div class="institution">Belgian National Fund for Scientific Research (F.R.S.-FNRS)</div>
-                        <p><strong>Status:</strong> Not granted (5% success rate) | Resubmission permitted and submitted (see <a href="#fnrs2026">January 2026</a>)</p>
-                        <p>Independent research position proposal for the iValve Platform combining multiphysics simulations with AI-driven optimisation of patient-specific polymeric aortic valves.</p>
-                        <p><strong>Host:</strong> Prof. B. Haut, Université libre de Bruxelles (ULB)</p>
-                        <p><strong>Collaborative support:</strong> ETH Zurich (Dr F. Coulter), Swiss Data Science Center (Dr E. Krymova), Politecnico di Torino (Prof. U. Morbiducci)</p>
                     </div>
 
                     <div class="timeline-item">
