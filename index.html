@@ -1621,6 +1621,75 @@
             border-radius: 3px;
         }
 
+        /* ── Hero intro video (plays once per session, then dissolves into the page) ── */
+        .intro { display: none; }
+
+        html.intro-playing { overflow: hidden; }
+
+        /* Hold the page's own entrance animations until the intro hands over */
+        html.intro-playing body *:not(.intro):not(.intro *) {
+            animation-play-state: paused !important;
+        }
+
+        html.intro-playing .intro,
+        .intro.is-leaving {
+            display: block;
+            position: fixed;
+            inset: 0;
+            z-index: 10000;                 /* above .grain (9999) and nav */
+            background: #0e1b26;            /* = dark --page-bg-1, the video's end colour */
+            opacity: 1;
+            transition: opacity 1.4s cubic-bezier(0.4, 0, 0.2, 1),
+                        transform 1.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .intro.is-leaving {
+            opacity: 0;
+            transform: scale(1.03);
+            pointer-events: none;
+        }
+
+        .intro video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;          /* whole frame always visible; edges blend into the background */
+            display: block;
+        }
+
+        .intro-skip {
+            position: absolute;
+            right: 2rem;
+            bottom: 2rem;
+            font: 500 0.8rem/1 'IBM Plex Sans', sans-serif;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.78);
+            background: rgba(14, 27, 38, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            border-radius: 999px;
+            padding: 0.7rem 1.1rem;
+            backdrop-filter: blur(8px);
+            cursor: pointer;
+            opacity: 0;
+            animation: introSkipIn 0.6s ease-out 1.6s forwards;
+            transition: color 0.25s ease, border-color 0.25s ease;
+        }
+
+        .intro-skip:hover { color: #fff; border-color: var(--accent); }
+        .intro-skip:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+        @keyframes introSkipIn { to { opacity: 1; } }
+
+        @media (max-width: 768px) {
+            .intro-skip { right: 1rem; bottom: 1.25rem; }
+        }
+
+        @media print {
+            .intro { display: none !important; }
+            html.intro-playing { overflow: visible; }
+        }
+        /* ── End hero intro video ── */
+
         @media (prefers-reduced-motion: reduce) {
             *,
             *::before,
@@ -1722,8 +1791,29 @@
         }
     })();
     </script>
+
+    <!-- Hero intro video: decide before first paint whether it plays -->
+    <script>
+    (function () {
+        var root = document.documentElement;
+        try {
+            var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            var saveData = navigator.connection && navigator.connection.saveData;
+            var seen = sessionStorage.getItem('introSeen') === '1';
+            var deepLink = !!window.location.hash;   // arriving on #section: go straight there
+            if (!reduce && !saveData && !seen && !deepLink) root.classList.add('intro-playing');
+        } catch (e) {}
+    })();
+    </script>
 </head>
 <body>
+    <!-- Hero intro video overlay (removed from the page once it has played) -->
+    <div class="intro" id="intro">
+        <video id="intro-video" aria-hidden="true" muted playsinline preload="auto"
+               poster="assets/intro/intro-poster.jpg"></video>
+        <button class="intro-skip" type="button" id="intro-skip">Skip intro</button>
+    </div>
+
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PHC6ZSJ9"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -2596,6 +2686,58 @@
 
         // Sync the button label with whatever theme the head script chose
         applyThemeState(document.documentElement.getAttribute('data-theme') || 'light');
+
+        // ── Hero intro video: play once, then hand over to the page ──
+        (function () {
+            var root = document.documentElement;
+            var intro = document.getElementById('intro');
+            if (!intro) return;
+            if (!root.classList.contains('intro-playing')) { intro.remove(); return; }
+
+            var video = document.getElementById('intro-video');
+            var skip = document.getElementById('intro-skip');
+            var done = false;
+
+            // Windows taller than wide get the portrait cut, all others the 16:9 one
+            var portrait = window.matchMedia('(max-aspect-ratio: 1/1)').matches;
+            video.src = portrait ? 'assets/intro/intro-portrait.mp4' : 'assets/intro/intro-1080.mp4';
+
+            function reveal() {
+                if (done) return;
+                done = true;
+                try { sessionStorage.setItem('introSeen', '1'); } catch (e) {}
+                intro.classList.add('is-leaving');           // keeps it visible while it fades
+                root.classList.remove('intro-playing');      // releases scroll + page animations
+                setTimeout(function () { intro.remove(); }, 1500);
+                ['keydown', 'wheel', 'touchmove'].forEach(function (ev) {
+                    window.removeEventListener(ev, onUserSkip);
+                });
+            }
+
+            function onUserSkip(e) {
+                if (e.type === 'keydown' && ['Escape', 'Enter', ' ', 'ArrowDown', 'PageDown'].indexOf(e.key) === -1) return;
+                reveal();
+            }
+
+            // Start the dissolve ~1.2 s before the end so it overlaps the video's own fade
+            video.addEventListener('timeupdate', function () {
+                if (video.duration && video.currentTime >= video.duration - 1.2) reveal();
+            });
+            video.addEventListener('ended', reveal);
+            video.addEventListener('error', reveal);
+
+            var p = video.play();
+            if (p && p.catch) p.catch(reveal);               // autoplay blocked: show the page
+
+            // Safety net: never hold the page if the video stalls before it starts
+            setTimeout(function () { if (video.currentTime < 0.1) reveal(); }, 4000);
+
+            skip.addEventListener('click', reveal);
+            intro.addEventListener('click', reveal);
+            ['keydown', 'wheel', 'touchmove'].forEach(function (ev) {
+                window.addEventListener(ev, onUserSkip, { passive: true });
+            });
+        })();
     </script>
 </body>
 </html>
