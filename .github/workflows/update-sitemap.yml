@@ -1,0 +1,38 @@
+# Updates <lastmod> in sitemap.xml whenever index.html changes.
+# Place this file at: .github/workflows/update-sitemap.yml
+name: Update sitemap lastmod
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - index.html
+
+permissions:
+  contents: write
+
+jobs:
+  update-lastmod:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set lastmod to the latest index.html commit date
+        run: |
+          D=$(git log -1 --format=%cI -- index.html)
+          sed -i -E "s|<lastmod>[^<]*</lastmod>|<lastmod>${D}</lastmod>|" sitemap.xml
+          echo "lastmod set to ${D}"
+
+      - name: Commit if changed
+        run: |
+          if git diff --quiet sitemap.xml; then
+            echo "sitemap.xml already up to date"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898299+github-actions[bot]@users.noreply.github.com"
+          git add sitemap.xml
+          git commit -m "Update sitemap lastmod"
+          git push
